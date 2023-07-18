@@ -30,7 +30,7 @@ public class JwtTokenUtil {
 	public String generateAccessToken(User user) {
 		
 		return Jwts.builder()
-				.setSubject(String.format("%s,%s", user.getId(), user.getName()))
+				.setSubject(String.format("%s,%s", user.getId(), user.getPhone()))
 				.setIssuer("salon")
 				.claim("roles", user.getRoles().toString())
 				.setIssuedAt(new Date())

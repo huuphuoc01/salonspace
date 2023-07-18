@@ -4,6 +4,8 @@ package com.example.salonmanage.Entities;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
+
+import org.hibernate.annotations.Nationalized;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -17,6 +19,7 @@ public class User implements UserDetails {
     @GeneratedValue(strategy = GenerationType.AUTO)
         private Integer id;
     @Column(nullable = false)
+    @Nationalized
     private String name;
     @Column(nullable = false)
     private String birthday;
@@ -52,8 +55,8 @@ public class User implements UserDetails {
 
     }
 
-    public User(Integer id, String name, String birthday, String phone, String img, String password, String email, Set<Role> roles, int status, Branch branch, List<comment> comments) {
-        this.id = id;
+    public User( String name, String birthday, String phone, String img, String password, String email, Set<Role> roles, int status, Branch branch, List<comment> comments) {
+
         this.name = name;
         this.birthday = birthday;
         this.phone = phone;

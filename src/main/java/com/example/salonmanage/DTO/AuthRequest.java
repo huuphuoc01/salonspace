@@ -9,7 +9,7 @@ public class AuthRequest {
      @Length(min = 5, max = 50)
     private String phone;
 
-    @NotNull @Length(min = 5, max = 10)
+    @NotNull @Length(min = 3, max = 500)
     private String password;
 
     public AuthRequest() {

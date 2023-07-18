@@ -6,10 +6,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.List;
 
 @Service
-public class userServiceImpl implements userService {
+@Transactional
+public class userServiceImpl implements UserService {
    @Autowired
     private userRepository userRepository;
     @Autowired private PasswordEncoder passwordEncoder;
@@ -25,6 +27,6 @@ public class userServiceImpl implements userService {
         String encodedPassword = passwordEncoder.encode(rawPassword);
         user.setPassword(encodedPassword);
 
-        return userRepository.save(user);
+      return userRepository.save(user);
     }
 }

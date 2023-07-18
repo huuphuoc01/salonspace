@@ -5,7 +5,7 @@ import com.example.salonmanage.Entities.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import com.example.salonmanage.service.userService;
+import com.example.salonmanage.service.UserService;
 
 import javax.validation.Valid;
 import java.net.URI;
@@ -14,7 +14,7 @@ import java.net.URI;
 @RestController
 @RequestMapping("/users")
 public class usercontroller {
-    @Autowired  private userService userService;
+    @Autowired  private UserService userService;
 
 
 
