@@ -2,6 +2,9 @@ package com.example.salonmanage.Entities;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+
+import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.Nationalized;
 import org.hibernate.validator.constraints.Length;
 
 import java.util.List;
@@ -16,6 +19,7 @@ public class Branch {
     @Column(nullable = false, length = 128)
     @NotNull
     @Length(min = 5, max = 128)
+    @Nationalized
     private String name;
 
     private double lat;
@@ -24,21 +28,25 @@ public class Branch {
 
     @Column(nullable = false, length = 1028)
     @NotNull
+    @Nationalized
     private String address;
 
-
+    @ColumnDefault("1")
+    private int status;
 
 
     public Branch() {
 
     }
 
-    public Branch(Integer id, @NotNull String name, double lat, double lng, @NotNull String address) {
+
+    public Branch(Integer id, String name, double lat, double lng, String address, int status) {
         this.id = id;
         this.name = name;
         this.lat = lat;
         this.lng = lng;
         this.address = address;
+        this.status = status;
     }
 
     public Integer getId() {
@@ -81,7 +89,13 @@ public class Branch {
         this.address = address;
     }
 
+    public int getStatus() {
+        return status;
+    }
 
+    public void setStatus(int status) {
+        this.status = status;
+    }
 
     @Override
     public String toString() {

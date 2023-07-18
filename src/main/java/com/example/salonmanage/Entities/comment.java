@@ -19,7 +19,7 @@ public class comment {
     public comment() {
     }
 
-    public comment(int id, int parentID, com.example.salonmanage.Entities.User user, Service service) {
+    public comment(int id, int parentID, User user, Service service) {
         this.id = id;
         this.parentID = parentID;
         this.user = user;
@@ -42,11 +42,11 @@ public class comment {
         this.parentID = parentID;
     }
 
-    public com.example.salonmanage.Entities.User getUser() {
+    public User getUser() {
         return user;
     }
 
-    public void setUser(com.example.salonmanage.Entities.User user) {
+    public void setUser(User user) {
         this.user = user;
     }
 

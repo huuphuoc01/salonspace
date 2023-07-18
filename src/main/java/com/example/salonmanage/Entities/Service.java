@@ -1,6 +1,8 @@
 package com.example.salonmanage.Entities;
 
 
+import org.hibernate.annotations.Nationalized;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
@@ -15,6 +17,7 @@ public class Service {
 
     @Column(nullable = false, length = 128)
     @NotNull
+    @Nationalized
     private String name;
 
 
