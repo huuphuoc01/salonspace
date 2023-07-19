@@ -28,4 +28,8 @@ public class usercontroller {
 
         return ResponseEntity.created(uri).body(userDto);
     }
+    @GetMapping("/mail")
+    public void mail(){
+        userService.sendmail();
+    }
 }

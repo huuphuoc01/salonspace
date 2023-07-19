@@ -3,6 +3,8 @@ package com.example.salonmanage.service;
 import com.example.salonmanage.Entities.User;
 import com.example.salonmanage.reponsitory.userRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -14,6 +16,10 @@ import java.util.List;
 public class userServiceImpl implements UserService {
    @Autowired
     private userRepository userRepository;
+
+    @Autowired
+    private JavaMailSender mailSender;
+
     @Autowired private PasswordEncoder passwordEncoder;
     @Override
     public List<User> getAll() {
@@ -28,5 +34,15 @@ public class userServiceImpl implements UserService {
         user.setPassword(encodedPassword);
 
       return userRepository.save(user);
+    }
+
+    @Override
+    public void sendmail() {
+        SimpleMailMessage message =new SimpleMailMessage();
+        message.setFrom("salonspaseteam@gmail.com");
+        message.setTo("hoangphucqh1234@gmail.com");
+        message.setText("hellll000");
+        message.setSubject("hêhehehe");
+        mailSender.send(message);
     }
 }
