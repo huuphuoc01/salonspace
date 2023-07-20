@@ -1,8 +1,10 @@
 package com.example.salonmanage.service;
 
+import com.example.salonmanage.DTO.registerDTO;
 import com.example.salonmanage.Entities.User;
 import com.example.salonmanage.reponsitory.userRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -44,5 +46,19 @@ public class userServiceImpl implements UserService {
         message.setText("hellll000");
         message.setSubject("hêhehehe");
         mailSender.send(message);
+    }
+
+    @Override
+    public String OTP(registerDTO registerDTO) {
+        int randomPIN = (int) (Math.random() * 9000) + 1000;
+        String stringRandomPIN = String.valueOf(randomPIN);
+        SimpleMailMessage message =new SimpleMailMessage();
+        message.setFrom("salonspaseteam@gmail.com");
+        message.setTo(registerDTO.getEmail());
+        message.setText("Hello \n\n" +"Your Register OTP :" + stringRandomPIN + ".Please Verify. \n\n"+"Regards \n"+"SalonSpace");
+        message.setSubject("Regiter OPT");
+        mailSender.send(message);
+
+        return stringRandomPIN;
     }
 }
