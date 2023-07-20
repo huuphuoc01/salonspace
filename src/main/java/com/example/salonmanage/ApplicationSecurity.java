@@ -50,7 +50,9 @@ public class ApplicationSecurity extends WebSecurityConfigurerAdapter {
 		http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 
 		http.authorizeRequests()
-				.antMatchers("/auth/login", "/docs/**", "/users", "/branch", "/branch/**","/service","/img/**").permitAll()
+
+				.antMatchers("/auth/login", "/docs/**", "/users/mail", "/branch", "/branch/**","/service","/img/**").permitAll()
+ main
 				.anyRequest().authenticated();
 
         http.exceptionHandling()
