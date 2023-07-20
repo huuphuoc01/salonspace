@@ -73,7 +73,6 @@ public class BranchApi {
     public ResponseEntity<?> delete(@PathVariable Integer id) {
         if ( !branchRepo.existsById(id)){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-//            return ResponseEntity.ok("ID không tồn tại");
         }else {
             Branch update = branchRepo.findById(id).orElse(null);;
             update.setStatus(3);
