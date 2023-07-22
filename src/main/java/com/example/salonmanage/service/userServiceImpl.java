@@ -14,13 +14,15 @@ import java.util.List;
 @Service
 @Transactional
 public class userServiceImpl implements UserService {
-   @Autowired
+    @Autowired
     private userRepository userRepository;
 
     @Autowired
     private JavaMailSender mailSender;
 
-    @Autowired private PasswordEncoder passwordEncoder;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
     @Override
     public List<User> getAll() {
         System.out.println(userRepository.findAll());
@@ -33,16 +35,27 @@ public class userServiceImpl implements UserService {
         String encodedPassword = passwordEncoder.encode(rawPassword);
         user.setPassword(encodedPassword);
 
-      return userRepository.save(user);
+        return userRepository.save(user);
     }
 
     @Override
     public void sendmail() {
-        SimpleMailMessage message =new SimpleMailMessage();
+        SimpleMailMessage message = new SimpleMailMessage();
         message.setFrom("salonspaseteam@gmail.com");
         message.setTo("hoangphucqh1234@gmail.com");
         message.setText("hellll000");
         message.setSubject("hêhehehe");
         mailSender.send(message);
+    }
+
+    @Override
+    public User findByPhone(String phone){
+        User user = userRepository.findByPhone(phone).get();
+        return  user;
+    }
+
+    @Override
+    public  User update(User user){
+        return userRepository.save(user);
     }
 }

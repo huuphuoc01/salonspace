@@ -8,4 +8,7 @@ public interface UserService {
     public List<User> getAll();
     public User save(User user);
     public  void sendmail();
+
+    public User findByPhone(String phone);
+    public User update(User user);
 }
