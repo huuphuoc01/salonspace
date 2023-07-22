@@ -4,7 +4,7 @@ public class ServiceDTO {
     private int id;
     private String name;
     private float price;
-    private int branch;
+
     private String img;
 
     public int getId() {
@@ -31,13 +31,6 @@ public class ServiceDTO {
         this.price = price;
     }
 
-    public int getBranch() {
-        return branch;
-    }
-
-    public void setBranch(int branch) {
-        this.branch = branch;
-    }
 
     public String getImg() {
         return img;

@@ -36,7 +36,7 @@ public class Service {
     public Service() {
     }
 
-    public Service(Integer id, @NotNull String name, float price, String img, Branch branch, Collection<ImgDetail> imgDetails) {
+    public Service(Integer id, @NotNull String name, float price, String img, Collection<ImgDetail> imgDetails) {
         this.id = id;
         this.name = name;
         this.price = price;
