@@ -14,7 +14,7 @@ import javax.annotation.security.RolesAllowed;
 import javax.validation.Valid;
 import java.net.URI;
 import java.util.List;
-import java.util.Optional;
+
 
 
 @RestController
@@ -46,7 +46,7 @@ public class BranchApi {
         if ( !branchRepo.existsById(id)){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }else {
-            return ResponseEntity.ok().body(branchRepo.findById(id).orElse(null));
+            return ResponseEntity.ok().body(branchRepo.findById(id).get());
         }
     }
 

@@ -5,7 +5,39 @@ public class ServiceDTO {
     private String name;
     private float price;
 
+    private String description;
     private String img;
+
+    private  int status;
+    private String[] imgList;
+    public ServiceDTO() {
+    }
+
+    public ServiceDTO(int id, String name, float price, String description, String img, int status, String[] imgList) {
+        this.id = id;
+        this.name = name;
+        this.price = price;
+        this.description = description;
+        this.img = img;
+        this.status = status;
+        this.imgList = imgList;
+    }
+
+    public int getStatus() {
+        return status;
+    }
+
+    public void setStatus(int status) {
+        this.status = status;
+    }
+
+    public String[] getImgList() {
+        return imgList;
+    }
+
+    public void setImgList(String[] imgList) {
+        this.imgList = imgList;
+    }
 
     public int getId() {
         return id;
@@ -39,5 +71,13 @@ public class ServiceDTO {
     public void setImg(String img) {
         this.img = img;
     }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
 }
-//
+

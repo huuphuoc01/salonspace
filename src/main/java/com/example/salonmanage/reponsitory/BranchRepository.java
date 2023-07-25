@@ -11,5 +11,5 @@ import java.util.List;
 public interface BranchRepository extends JpaRepository<Branch, Integer> {
     @Query("SELECT b FROM Branch b WHERE b.status != 3")
     List<Branch> findAllWithNotRemove();
-    //
+
 }
