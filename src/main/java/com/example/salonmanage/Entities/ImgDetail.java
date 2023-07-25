@@ -1,5 +1,8 @@
 package com.example.salonmanage.Entities;
 
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import javax.persistence.*;
 
 @Entity
@@ -11,13 +14,14 @@ public class ImgDetail {
     private String img;
     @ManyToOne
     @JoinColumn(name = "service_iD")
+    @JsonBackReference
     private Service service;
 
     public ImgDetail() {
     }
 
-    public ImgDetail(int id, String img, Service service) {
-        this.id = id;
+    public ImgDetail( String img, Service service) {
+
         this.img = img;
         this.service = service;
     }

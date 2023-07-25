@@ -61,8 +61,7 @@ public class userServiceImpl implements UserService {
     public  User update(User user){
         return userRepository.save(user);
     }
-}
-
+    @Override
     public String OTP(registerDTO registerDTO) {
         int randomPIN = (int) (Math.random() * 9000) + 1000;
         String stringRandomPIN = String.valueOf(randomPIN);
@@ -76,4 +75,7 @@ public class userServiceImpl implements UserService {
         return stringRandomPIN;
     }
 }
+
+
+
 
