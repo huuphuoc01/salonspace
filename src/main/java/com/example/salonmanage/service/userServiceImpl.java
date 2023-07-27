@@ -3,10 +3,9 @@ package com.example.salonmanage.service;
 import com.example.salonmanage.DTO.registerDTO;
 import com.example.salonmanage.Entities.Role;
 import com.example.salonmanage.Entities.User;
-import com.example.salonmanage.reponsitory.roleRepository;
+import com.example.salonmanage.reponsitory.RoleRepository;
 import com.example.salonmanage.reponsitory.userRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -25,7 +24,7 @@ public class userServiceImpl implements UserService {
     @Autowired
     private JavaMailSender mailSender;
     @Autowired
-    private roleRepository roleRepository;
+    private RoleRepository roleRepository;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -56,28 +55,24 @@ public class userServiceImpl implements UserService {
     }
 
     @Override
-<<<<<<< HEAD
-    public String OTP(String mail) {
-=======
-
-    public User findByPhone(String phone){
+    public User findByPhone(String phone) {
         User user = userRepository.findByPhone(phone).get();
-        return  user;
+        return user;
     }
 
     @Override
-    public  User update(User user){
+    public User update(User user) {
         return userRepository.save(user);
     }
+
     @Override
-    public String OTP(registerDTO registerDTO) {
->>>>>>> f11ef166f8e066d41db0a8cc1887db0189a30969
+    public String OTP(String mail) {
         int randomPIN = (int) (Math.random() * 9000) + 1000;
         String stringRandomPIN = String.valueOf(randomPIN);
-        SimpleMailMessage message =new SimpleMailMessage();
+        SimpleMailMessage message = new SimpleMailMessage();
         message.setFrom("salonspaseteam@gmail.com");
         message.setTo(mail);
-        message.setText("Hello \n\n" +"Your Register OTP :" + stringRandomPIN + ".Please Verify. \n\n"+"Regards \n"+"SalonSpace");
+        message.setText("Hello \n\n" + "Your Register OTP :" + stringRandomPIN + ".Please Verify. \n\n" + "Regards \n" + "SalonSpace");
         message.setSubject("Regiter OTP");
         mailSender.send(message);
 
