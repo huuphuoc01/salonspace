@@ -9,11 +9,8 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class registerDTO {
-    private String otp;
-    private String name;
-    private String birthday;
-    private String phone;
-    private String pass;
+public class forgotDTO {
     private String email;
+    private String otp;
+
 }

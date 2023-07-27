@@ -1,7 +1,9 @@
 package com.example.salonmanage.service;
 
 import com.example.salonmanage.DTO.registerDTO;
+import com.example.salonmanage.Entities.Role;
 import com.example.salonmanage.Entities.User;
+import com.example.salonmanage.reponsitory.roleRepository;
 import com.example.salonmanage.reponsitory.userRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -12,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.List;
+import java.util.Set;
 
 @Service
 @Transactional
@@ -21,6 +24,8 @@ public class userServiceImpl implements UserService {
 
     @Autowired
     private JavaMailSender mailSender;
+    @Autowired
+    private roleRepository roleRepository;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -51,6 +56,9 @@ public class userServiceImpl implements UserService {
     }
 
     @Override
+<<<<<<< HEAD
+    public String OTP(String mail) {
+=======
 
     public User findByPhone(String phone){
         User user = userRepository.findByPhone(phone).get();
@@ -63,16 +71,32 @@ public class userServiceImpl implements UserService {
     }
     @Override
     public String OTP(registerDTO registerDTO) {
+>>>>>>> f11ef166f8e066d41db0a8cc1887db0189a30969
         int randomPIN = (int) (Math.random() * 9000) + 1000;
         String stringRandomPIN = String.valueOf(randomPIN);
         SimpleMailMessage message =new SimpleMailMessage();
         message.setFrom("salonspaseteam@gmail.com");
-        message.setTo(registerDTO.getEmail());
+        message.setTo(mail);
         message.setText("Hello \n\n" +"Your Register OTP :" + stringRandomPIN + ".Please Verify. \n\n"+"Regards \n"+"SalonSpace");
-        message.setSubject("Regiter OPT");
+        message.setSubject("Regiter OTP");
         mailSender.send(message);
 
         return stringRandomPIN;
+    }
+
+    @Override
+    public void register(registerDTO registerDTO) {
+        Role role = roleRepository.findByName("ROLE_CUSTOMER");
+        User user = new User();
+        user.setEmail(registerDTO.getEmail());
+        user.setName(registerDTO.getName());
+        user.setPassword(passwordEncoder.encode(registerDTO.getPass()));
+        user.setRoles(Set.of(role));
+        user.setBirthday(registerDTO.getBirthday());
+        user.setStatus(1);
+        user.setPhone(registerDTO.getPhone());
+        user.setImg("sss");
+        userRepository.save(user);
     }
 }
 

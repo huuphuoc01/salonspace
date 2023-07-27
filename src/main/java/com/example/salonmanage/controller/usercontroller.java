@@ -1,11 +1,13 @@
 package com.example.salonmanage.controller;
 
+import com.example.salonmanage.DTO.forgotDTO;
 import com.example.salonmanage.DTO.registerDTO;
 import com.example.salonmanage.DTO.userDTO;
 import com.example.salonmanage.Entities.User;
 import com.example.salonmanage.reponsitory.userRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import com.example.salonmanage.service.UserService;
 
@@ -24,6 +26,8 @@ public class usercontroller {
     @Autowired
     private userRepository userRepository;
     private final Map<String, String> otpStore = new HashMap<>();
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @PutMapping()
     public ResponseEntity<?> createUser(@RequestBody @Valid User user) {
@@ -41,8 +45,8 @@ public class usercontroller {
         String email = registerDTO.getEmail();
         if(phoneExist == false){
             if (emailExist == false){
-            String opt = userService.OTP(registerDTO);
-                otpStore.put(email,opt);
+            String otp = userService.OTP(registerDTO.getEmail());
+                otpStore.put(email,otp);
             return ResponseEntity.ok("Generate OTP successfully");
             }
             else{
@@ -51,5 +55,49 @@ public class usercontroller {
         }else {
             return ResponseEntity.ok("Phone is already existed");
         }
+    }
+    @PostMapping("/register")
+    public ResponseEntity<String> register(@RequestBody registerDTO registerDTO)
+    {
+        String email = registerDTO.getEmail();
+        String otp= registerDTO.getOtp();
+        if (otpStore.containsKey(email) && otpStore.get(email).equals(otp)){
+            userService.register(registerDTO);
+            otpStore.remove(email);
+            return ResponseEntity.ok("sucessfully");
+        }
+        else  return ResponseEntity.ok("OTP is not correct");
+    }
+    @PostMapping("/mail2")
+    public ResponseEntity<String> mail(@RequestBody forgotDTO forgotDTO){
+        System.out.println(forgotDTO.getEmail());
+        String email = forgotDTO.getEmail();
+        boolean existMail = userRepository.existsByEmail(email);
+        System.out.println(existMail);
+        if(existMail == true){
+            String otp = userService.OTP(email);
+            otpStore.put(email,otp);
+            return ResponseEntity.ok("suscess");
+        }
+        else  return ResponseEntity.ok("email not exist");
+    }
+    @PostMapping("/checkotp")
+    public ResponseEntity<String> checkOTP(@RequestBody forgotDTO forgotDTO)
+    {
+        String email = forgotDTO.getEmail();
+        String otp= forgotDTO.getOtp();
+        if (otpStore.containsKey(email) && otpStore.get(email).equals(otp)){
+            otpStore.remove(email); 
+            return ResponseEntity.ok("sucessfully");
+        }
+        else  return ResponseEntity.ok("OTP is not correct");
+    }
+    @PostMapping("/resetpass")
+    public  ResponseEntity<String> resetPass(@RequestBody forgotDTO forgotDTO)
+    {
+        User user = userRepository.findByEmail(forgotDTO.getEmail());
+        user.setPassword(passwordEncoder.encode(forgotDTO.getOtp()));
+        userRepository.save(user);
+        return ResponseEntity.ok("suscess");
     }
 }
