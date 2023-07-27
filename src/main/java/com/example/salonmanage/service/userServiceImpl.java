@@ -19,7 +19,7 @@ import java.util.Set;
 @Service
 @Transactional
 public class userServiceImpl implements UserService {
-   @Autowired
+    @Autowired
     private userRepository userRepository;
 
     @Autowired
@@ -27,7 +27,9 @@ public class userServiceImpl implements UserService {
     @Autowired
     private roleRepository roleRepository;
 
-    @Autowired private PasswordEncoder passwordEncoder;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
     @Override
     public List<User> getAll() {
         System.out.println(userRepository.findAll());
@@ -40,12 +42,12 @@ public class userServiceImpl implements UserService {
         String encodedPassword = passwordEncoder.encode(rawPassword);
         user.setPassword(encodedPassword);
 
-      return userRepository.save(user);
+        return userRepository.save(user);
     }
 
     @Override
     public void sendmail() {
-        SimpleMailMessage message =new SimpleMailMessage();
+        SimpleMailMessage message = new SimpleMailMessage();
         message.setFrom("salonspaseteam@gmail.com");
         message.setTo("hoangphucqh1234@gmail.com");
         message.setText("hellll000");
@@ -54,7 +56,22 @@ public class userServiceImpl implements UserService {
     }
 
     @Override
+<<<<<<< HEAD
     public String OTP(String mail) {
+=======
+
+    public User findByPhone(String phone){
+        User user = userRepository.findByPhone(phone).get();
+        return  user;
+    }
+
+    @Override
+    public  User update(User user){
+        return userRepository.save(user);
+    }
+    @Override
+    public String OTP(registerDTO registerDTO) {
+>>>>>>> f11ef166f8e066d41db0a8cc1887db0189a30969
         int randomPIN = (int) (Math.random() * 9000) + 1000;
         String stringRandomPIN = String.valueOf(randomPIN);
         SimpleMailMessage message =new SimpleMailMessage();
@@ -82,3 +99,7 @@ public class userServiceImpl implements UserService {
         userRepository.save(user);
     }
 }
+
+
+
+

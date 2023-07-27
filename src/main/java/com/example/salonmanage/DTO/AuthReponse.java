@@ -6,14 +6,17 @@ public class AuthReponse {
     private String img;
 
     private String accessToken;
-
+    private  String birthday;
+    private String email;
     public AuthReponse() { }
 
-    public AuthReponse(String phone, String name, String img, String accessToken) {
+    public AuthReponse(String phone, String name, String img, String accessToken, String birthday, String email) {
         this.phone = phone;
         this.name = name;
         this.img = img;
         this.accessToken = accessToken;
+        this.birthday = birthday;
+        this.email = email;
     }
 
     public String getPhone() {
@@ -46,5 +49,21 @@ public class AuthReponse {
 
     public void setAccessToken(String accessToken) {
         this.accessToken = accessToken;
+    }
+
+    public String getBirthday() {
+        return birthday;
+    }
+
+    public void setBirthday(String birthday) {
+        this.birthday = birthday;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 }

@@ -1,6 +1,9 @@
 package com.example.salonmanage.Entities;
 
 
+
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.Nationalized;
 
 import javax.persistence.*;
@@ -24,10 +27,13 @@ public class Service {
     private float price;
 
     private  String img;
+    @Nationalized
+    private String description;
 
-
-
+    @ColumnDefault("1")
+    private int status;
     @OneToMany(mappedBy = "service")
+    @JsonManagedReference
     private Collection<ImgDetail> imgDetails;
 
     @OneToMany(mappedBy = "service")
@@ -36,13 +42,13 @@ public class Service {
     public Service() {
     }
 
-    public Service(Integer id, @NotNull String name, float price, String img, Branch branch, Collection<ImgDetail> imgDetails) {
+    public Service(Integer id, String name, float price, String img, String description, int status) {
         this.id = id;
         this.name = name;
         this.price = price;
         this.img = img;
-
-        this.imgDetails = imgDetails;
+        this.description = description;
+        this.status = status;
     }
 
     public Integer getId() {
@@ -77,7 +83,21 @@ public class Service {
         this.img = img;
     }
 
+    public String getDescription() {
+        return description;
+    }
 
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public int getStatus() {
+        return status;
+    }
+
+    public void setStatus(int status) {
+        this.status = status;
+    }
 
     public Collection<ImgDetail> getImgDetails() {
         return imgDetails;
@@ -85,6 +105,14 @@ public class Service {
 
     public void setImgDetails(Collection<ImgDetail> imgDetails) {
         this.imgDetails = imgDetails;
+    }
+
+    public Collection<comment> getComments() {
+        return comments;
+    }
+
+    public void setComments(Collection<comment> comments) {
+        this.comments = comments;
     }
 
     @Override
@@ -95,6 +123,8 @@ public class Service {
                 ", price=" + price +
                 ", img='" + img + '\'' +
                 ", imgDetails=" + imgDetails +
+                ", description=" + description +
+                ", status=" + status +
                 '}';
     }
 }

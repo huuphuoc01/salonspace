@@ -19,6 +19,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import javax.servlet.http.HttpServletResponse;
@@ -49,7 +50,11 @@ public class ApplicationSecurity extends WebSecurityConfigurerAdapter {
 		http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 
 		http.authorizeRequests()
+<<<<<<< HEAD
 				.antMatchers("/auth/login", "/docs/**", "/users/**", "/branch", "/branch/**","/service").permitAll()
+=======
+				.antMatchers("/auth/login","/auth/update","/auth/updateImg", "/docs/**", "/users/mail", "/branch", "/branch/**","/service","/service/**","/img/**").permitAll()
+>>>>>>> f11ef166f8e066d41db0a8cc1887db0189a30969
 				.anyRequest().authenticated();
 
         http.exceptionHandling()
