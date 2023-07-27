@@ -32,11 +32,11 @@ public class Service {
 
     @ColumnDefault("1")
     private int status;
-    @OneToMany(mappedBy = "service")
+    @OneToMany(mappedBy = "service", fetch = FetchType.LAZY)
     @JsonManagedReference
     private Collection<ImgDetail> imgDetails;
 
-    @OneToMany(mappedBy = "service")
+    @OneToMany(mappedBy = "service", fetch = FetchType.LAZY)
     private Collection<comment> comments ;
 
     public Service() {

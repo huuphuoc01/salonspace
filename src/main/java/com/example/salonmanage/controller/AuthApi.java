@@ -21,6 +21,7 @@ import javax.xml.bind.DatatypeConverter;
 import java.io.ByteArrayInputStream;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.UUID;
 
 @RestController
 @CrossOrigin(origins = "*")
@@ -85,7 +86,8 @@ public class AuthApi {
                 break;
         }
         byte[] data = DatatypeConverter.parseBase64Binary(strings[1]);
-        String pathfile = dateTimeString + "." + extension;
+        String uniqueImageName = UUID.randomUUID().toString();
+        String pathfile = uniqueImageName+dateTimeString + "." + extension;
         fileStorageService.storeFile(new ByteArrayInputStream(data), pathfile);
         String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath()
                 .path("/img/")
