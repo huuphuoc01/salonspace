@@ -69,7 +69,7 @@ public class User implements UserDetails {
         this.comments = comments;
     }
 
-    public long getId() {
+    public Integer getId() {
         return id;
     }
 

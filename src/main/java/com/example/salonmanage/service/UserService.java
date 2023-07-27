@@ -9,5 +9,6 @@ public interface UserService {
     public List<User> getAll();
     public User save(User user);
     public  void sendmail();
-    public String OTP (registerDTO registerDTO);
+    public String OTP (String mail);
+    public void register(registerDTO registerDTO);
 }
