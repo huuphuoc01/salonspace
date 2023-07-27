@@ -34,13 +34,11 @@ public class BranchApi {
     }
 
     @GetMapping
-    @RolesAllowed("ROLE_ADMIN")
     public List<Branch> list() {
         return branchRepo.findAllWithNotRemove();
     }
 
     @GetMapping("/detail/{id}")
-    @RolesAllowed("ROLE_ADMIN")
     public ResponseEntity<?>  listId(@PathVariable Integer id) {
 //        return branchRepo.findById(id).orElse(null);
         if ( !branchRepo.existsById(id)){
