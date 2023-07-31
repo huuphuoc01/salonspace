@@ -23,6 +23,7 @@ public class userServiceImpl implements UserService {
 
     @Autowired
     private JavaMailSender mailSender;
+
     @Autowired
     private RoleRepository roleRepository;
 
@@ -53,6 +54,8 @@ public class userServiceImpl implements UserService {
         message.setSubject("hêhehehe");
         mailSender.send(message);
     }
+
+
 
     @Override
     public User findByPhone(String phone) {
@@ -93,6 +96,16 @@ public class userServiceImpl implements UserService {
         user.setImg("sss");
         userRepository.save(user);
     }
+
+//    @Override
+//    public User findByPhone(String phone) {
+//        return null;
+//    }
+////
+//    @Override
+//    public User update(User user) {
+//        return null;
+//    }
 }
 
 
