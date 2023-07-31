@@ -6,7 +6,6 @@ import com.example.salonmanage.Entities.User;
 import com.example.salonmanage.reponsitory.RoleRepository;
 import com.example.salonmanage.reponsitory.userRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -59,13 +58,24 @@ public class userServiceImpl implements UserService {
 
 
     @Override
+    public User findByPhone(String phone) {
+        User user = userRepository.findByPhone(phone).get();
+        return user;
+    }
+
+    @Override
+    public User update(User user) {
+        return userRepository.save(user);
+    }
+
+    @Override
     public String OTP(String mail) {
         int randomPIN = (int) (Math.random() * 9000) + 1000;
         String stringRandomPIN = String.valueOf(randomPIN);
-        SimpleMailMessage message =new SimpleMailMessage();
+        SimpleMailMessage message = new SimpleMailMessage();
         message.setFrom("salonspaseteam@gmail.com");
         message.setTo(mail);
-        message.setText("Hello \n\n" +"Your Register OTP :" + stringRandomPIN + ".Please Verify. \n\n"+"Regards \n"+"SalonSpace");
+        message.setText("Hello \n\n" + "Your Register OTP :" + stringRandomPIN + ".Please Verify. \n\n" + "Regards \n" + "SalonSpace");
         message.setSubject("Regiter OTP");
         mailSender.send(message);
 
@@ -87,15 +97,15 @@ public class userServiceImpl implements UserService {
         userRepository.save(user);
     }
 
-    @Override
-    public User findByPhone(String phone) {
-        return null;
-    }
-
-    @Override
-    public User update(User user) {
-        return null;
-    }
+//    @Override
+//    public User findByPhone(String phone) {
+//        return null;
+//    }
+////
+//    @Override
+//    public User update(User user) {
+//        return null;
+//    }
 }
 
 
