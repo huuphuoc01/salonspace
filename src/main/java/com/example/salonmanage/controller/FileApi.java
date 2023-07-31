@@ -14,7 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 
 @RestController
-public class FileApi {
+public class  FileApi {
     @Autowired
     private FileStorageService fileStorageService;
 
