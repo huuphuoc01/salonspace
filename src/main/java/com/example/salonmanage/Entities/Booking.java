@@ -21,22 +21,31 @@ public class Booking {
     private int payment;
     @Column(nullable = false)
     private long totalPrice;
+    @Column(nullable = false)
+    private Integer nhanvien;
+    @ManyToOne()
+    @JoinColumn(name = "user_id")
+    private User user;
     @ManyToOne()
     @JoinColumn(name="branch_id")
     private Branch branch;
 
     @OneToMany(mappedBy = "booking")
     private Collection<BookingDetail> bookingDetails;
+
+
     public Booking() {
     }
 
-    public Booking(Long ID, Date date, long discount, int status, int payment, long totalPrice, Branch branch, Collection<BookingDetail> bookingDetails) {
+    public Booking(Long ID, Date date, long discount, int status, int payment, long totalPrice, Integer nhanvien, User user, Branch branch, Collection<BookingDetail> bookingDetails) {
         this.ID = ID;
         this.date = date;
         this.discount = discount;
         this.status = status;
         this.payment = payment;
         this.totalPrice = totalPrice;
+        this.nhanvien = nhanvien;
+        this.user = user;
         this.branch = branch;
         this.bookingDetails = bookingDetails;
     }
@@ -55,6 +64,22 @@ public class Booking {
 
     public void setDate(Date date) {
         this.date = date;
+    }
+
+    public Integer getNhanvien() {
+        return nhanvien;
+    }
+
+    public void setNhanvien(Integer nhanvien) {
+        this.nhanvien = nhanvien;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 
     public long getDiscount() {
@@ -107,13 +132,15 @@ public class Booking {
 
     @Override
     public String toString() {
-        return "booking{" +
+        return "Booking{" +
                 "ID=" + ID +
                 ", date=" + date +
                 ", discount=" + discount +
                 ", status=" + status +
                 ", payment=" + payment +
                 ", totalPrice=" + totalPrice +
+                ", nhanvien=" + nhanvien +
+                ", user=" + user +
                 ", branch=" + branch +
                 ", bookingDetails=" + bookingDetails +
                 '}';

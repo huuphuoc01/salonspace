@@ -3,7 +3,7 @@ package com.example.salonmanage.service;
 import com.example.salonmanage.DTO.registerDTO;
 import com.example.salonmanage.Entities.Role;
 import com.example.salonmanage.Entities.User;
-import com.example.salonmanage.reponsitory.roleRepository;
+import com.example.salonmanage.reponsitory.RoleRepository;
 import com.example.salonmanage.reponsitory.userRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -24,8 +24,9 @@ public class userServiceImpl implements UserService {
 
     @Autowired
     private JavaMailSender mailSender;
+
     @Autowired
-    private roleRepository roleRepository;
+    private RoleRepository roleRepository;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -55,23 +56,10 @@ public class userServiceImpl implements UserService {
         mailSender.send(message);
     }
 
+
+
     @Override
-<<<<<<< HEAD
     public String OTP(String mail) {
-=======
-
-    public User findByPhone(String phone){
-        User user = userRepository.findByPhone(phone).get();
-        return  user;
-    }
-
-    @Override
-    public  User update(User user){
-        return userRepository.save(user);
-    }
-    @Override
-    public String OTP(registerDTO registerDTO) {
->>>>>>> f11ef166f8e066d41db0a8cc1887db0189a30969
         int randomPIN = (int) (Math.random() * 9000) + 1000;
         String stringRandomPIN = String.valueOf(randomPIN);
         SimpleMailMessage message =new SimpleMailMessage();
@@ -97,6 +85,16 @@ public class userServiceImpl implements UserService {
         user.setPhone(registerDTO.getPhone());
         user.setImg("sss");
         userRepository.save(user);
+    }
+
+    @Override
+    public User findByPhone(String phone) {
+        return null;
+    }
+
+    @Override
+    public User update(User user) {
+        return null;
     }
 }
 

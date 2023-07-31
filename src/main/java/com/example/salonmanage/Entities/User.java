@@ -50,24 +50,27 @@ public class User implements UserDetails {
     private Set<Role> roles = new HashSet<>();
 
 
-
+    @OneToMany(mappedBy = "user")
+    private  List<Booking> bookings = new ArrayList<>();
     public User(){
 
     }
 
-    public User( String name, String birthday, String phone, String img, String password, String email, Set<Role> roles, int status, Branch branch, List<comment> comments) {
-
+    public User(Integer id, String name, String birthday, String phone, String img, String password, String email, int status, Branch branch, List<comment> comments, Set<Role> roles, List<Booking> bookings) {
+        this.id = id;
         this.name = name;
         this.birthday = birthday;
         this.phone = phone;
         this.img = img;
         this.password = password;
         this.email = email;
-        this.roles = roles;
         this.status = status;
         this.branch = branch;
         this.comments = comments;
+        this.roles = roles;
+        this.bookings = bookings;
     }
+
 
     public Integer getId() {
         return id;
@@ -143,6 +146,14 @@ public class User implements UserDetails {
 
     public Branch getBranch() {
         return branch;
+    }
+
+    public List<Booking> getBookings() {
+        return bookings;
+    }
+
+    public void setBookings(List<Booking> bookings) {
+        this.bookings = bookings;
     }
 
     public void setBranch(Branch branch) {
