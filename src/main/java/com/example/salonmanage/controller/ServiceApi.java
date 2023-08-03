@@ -69,6 +69,14 @@ public class ServiceApi {
         return serviceRepo.findAllWithNotRemove();
     }
 
+    @GetMapping("/search")
+    public List<Service> list(@RequestParam(required = false) String search) {
+        if (search != null && !search.isEmpty()) {
+            return serviceRepo.findAllWithNotRemoveByName(search);
+        } else {
+            return serviceRepo.findAllWithNotRemove();
+        }
+    }
 
     @GetMapping("/detail/{id}")
     public ResponseEntity<?> listId(@PathVariable Integer id) {
