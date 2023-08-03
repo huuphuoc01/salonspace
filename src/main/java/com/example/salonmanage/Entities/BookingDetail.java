@@ -1,5 +1,7 @@
 package com.example.salonmanage.Entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 
 @Entity
@@ -7,32 +9,44 @@ import javax.persistence.*;
 public class BookingDetail {
     @Id
     @GeneratedValue
-    private long ID;
+    private Integer ID;
     @ManyToOne
+    @JsonIgnore
     @JoinColumn(name="booking_id")
     private Booking booking;
     @ManyToOne
+    @JsonIgnore
     @JoinColumn(name = "service_id")
     private Service service;
-    @ManyToOne()
-    @JoinColumn(name="user_id")
-    private User user;
+    @Column
+    private Integer cus_id;
+    @Column
+    private Integer status;
 
     public BookingDetail() {
     }
 
-    public BookingDetail(long ID, Booking booking, Service service, com.example.salonmanage.Entities.User user) {
+    public BookingDetail(Integer ID, Booking booking, Service service, Integer cus_id, Integer status) {
         this.ID = ID;
         this.booking = booking;
         this.service = service;
-        this.user = user;
+        this.cus_id = cus_id;
+        this.status = status;
     }
 
-    public long getID() {
+    public Integer getStatus() {
+        return status;
+    }
+
+    public void setStatus(Integer status) {
+        this.status = status;
+    }
+
+    public Integer getID() {
         return ID;
     }
 
-    public void setID(long ID) {
+    public void setID(Integer ID) {
         this.ID = ID;
     }
 
@@ -52,12 +66,12 @@ public class BookingDetail {
         this.service = service;
     }
 
-    public com.example.salonmanage.Entities.User getUser() {
-        return user;
+    public Integer getCus_id() {
+        return cus_id;
     }
 
-    public void setUser(com.example.salonmanage.Entities.User user) {
-        this.user = user;
+    public void setCus_id(Integer cus_id) {
+        this.cus_id = cus_id;
     }
 
     @Override
@@ -66,7 +80,8 @@ public class BookingDetail {
                 "ID=" + ID +
                 ", booking=" + booking +
                 ", service=" + service +
-                ", user=" + user +
+                ", cus_id=" + cus_id +
+                ", status=" + status +
                 '}';
     }
 }

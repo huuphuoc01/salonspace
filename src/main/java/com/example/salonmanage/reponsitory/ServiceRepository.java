@@ -11,4 +11,5 @@ import java.util.List;
 public interface ServiceRepository  extends JpaRepository<Service, Integer> {
     @Query("SELECT b FROM Service b WHERE b.status != 3")
     List<Service> findAllWithNotRemove();
+    Service findServiceById(Integer id);
 }

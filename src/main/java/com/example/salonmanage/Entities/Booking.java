@@ -2,6 +2,8 @@ package com.example.salonmanage.Entities;
 
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.util.Collection;
 import java.util.Date;
@@ -10,7 +12,7 @@ import java.util.Date;
 public class Booking {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long ID;
+    private Integer ID;
     @Column(nullable = false)
     private Date date;
     @Column()
@@ -24,9 +26,11 @@ public class Booking {
     @Column(nullable = false)
     private Integer nhanvien;
     @ManyToOne()
+    @JsonIgnore
     @JoinColumn(name = "user_id")
     private User user;
     @ManyToOne()
+    @JsonIgnore
     @JoinColumn(name="branch_id")
     private Branch branch;
 
@@ -37,7 +41,7 @@ public class Booking {
     public Booking() {
     }
 
-    public Booking(Long ID, Date date, long discount, int status, int payment, long totalPrice, Integer nhanvien, User user, Branch branch, Collection<BookingDetail> bookingDetails) {
+    public Booking(Integer ID, Date date, long discount, int status, int payment, long totalPrice, Integer nhanvien, User user, Branch branch, Collection<BookingDetail> bookingDetails) {
         this.ID = ID;
         this.date = date;
         this.discount = discount;
@@ -50,11 +54,11 @@ public class Booking {
         this.bookingDetails = bookingDetails;
     }
 
-    public Long getID() {
+    public Integer getID() {
         return ID;
     }
 
-    public void setID(Long ID) {
+    public void setID(Integer ID) {
         this.ID = ID;
     }
 
@@ -130,19 +134,5 @@ public class Booking {
         this.bookingDetails = bookingDetails;
     }
 
-    @Override
-    public String toString() {
-        return "Booking{" +
-                "ID=" + ID +
-                ", date=" + date +
-                ", discount=" + discount +
-                ", status=" + status +
-                ", payment=" + payment +
-                ", totalPrice=" + totalPrice +
-                ", nhanvien=" + nhanvien +
-                ", user=" + user +
-                ", branch=" + branch +
-                ", bookingDetails=" + bookingDetails +
-                '}';
-    }
+
 }
