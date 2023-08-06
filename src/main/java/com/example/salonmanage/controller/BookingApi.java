@@ -31,8 +31,9 @@ public class BookingApi {
     private ServiceRepository serviceRepository;
     @Autowired
     private BookingDetailRepository bookingDetailRepository;
+
     @PostMapping("/addToCart")
-    public void addToCart(@RequestBody CartDTO cartDTO){
+    public void addToCart(@RequestBody CartDTO cartDTO) {
         User user = userService.findByPhone(cartDTO.getPhone());
         System.out.println(user);
         BookingDetail bookingDetail = new BookingDetail();
@@ -46,25 +47,30 @@ public class BookingApi {
         bookingDetail.setStatus(0);
         System.out.println(user.getId());
 
-        BookingDetail B= bookingDetailRepository.save(bookingDetail);
+        BookingDetail B = bookingDetailRepository.save(bookingDetail);
         System.out.println(bookingDetail);
 
     }
-   @PostMapping("/listCart")
-    public ResponseEntity<?> listCart(@RequestBody CartDTO cartDTO){
-       User user = userService.findByPhone(cartDTO.getPhone());
-       List<BookingDetail> list = bookingDetailRepository.findByBookingId(user.getId());
-       List<Service> list1 = new ArrayList<>();
-       for (BookingDetail a : list
-       ) {
-           System.out.println(a);
-           list1.add(a.getService());
-       }
-       for (Service b:list1
-       ) {
-           System.out.println(b);
-       }
+
+    @PostMapping("/listCart")
+    public ResponseEntity<?> listCart(@RequestBody CartDTO cartDTO) {
+        User user = userService.findByPhone(cartDTO.getPhone());
+        List<BookingDetail> list = bookingDetailRepository.findByBookingId(user.getId());
+        List<Service> list1 = new ArrayList<>();
+        for (BookingDetail a : list
+        ) {
+            System.out.println(a);
+            list1.add(a.getService());
+        }
+        for (Service b : list1
+        ) {
+            System.out.println(b);
+        }
         return ResponseEntity.ok().body(list1);
     }
 
+    @GetMapping
+    public List<Booking> get() {
+        return bookingRepository.findAllWithNotRemove();
+    }
 }
