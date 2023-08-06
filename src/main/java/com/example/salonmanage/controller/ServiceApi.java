@@ -126,11 +126,10 @@ public class ServiceApi {
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
-
-
     }
 
     @DeleteMapping("{id}")
+    @RolesAllowed("ROLE_ADMIN")
     public ResponseEntity<?> delete(@PathVariable Integer id) {
         if (serviceRepo.existsById(id) == false) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
