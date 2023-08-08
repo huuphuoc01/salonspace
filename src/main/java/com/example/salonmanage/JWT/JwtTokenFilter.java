@@ -68,8 +68,8 @@ public class JwtTokenFilter extends OncePerRequestFilter {
 	private void setAuthenticationContext(String token, HttpServletRequest request) {
 		UserDetails userDetails = getUserDetails(token);
 
-		UsernamePasswordAuthenticationToken 
-			authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+		UsernamePasswordAuthenticationToken
+				authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
 
 		authentication.setDetails(
 				new WebAuthenticationDetailsSource().buildDetails(request));
@@ -83,16 +83,16 @@ public class JwtTokenFilter extends OncePerRequestFilter {
 		Claims claims = jwtUtil.parseClaims(token);
 		String subject = (String) claims.get(Claims.SUBJECT);
 		String roles = (String) claims.get("roles");
-		
+
 		System.out.println("SUBJECT: " + subject);
 		System.out.println("roles: " + roles);
-		roles = roles.replace("[", "").replace("]", "");
+		roles = roles.replace("[", "").replace("]", "").replace(" ","");
 		String[] roleNames = roles.split(",");
-		
+
 		for (String aRoleName : roleNames) {
 			userDetails.addRole(new Role(aRoleName));
 		}
-		
+
 		String[] jwtSubject = subject.split(",");
 
 		userDetails.setId(Integer.parseInt(jwtSubject[0]));

@@ -1,5 +1,7 @@
 package com.example.salonmanage.Entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 
 @Entity
@@ -7,32 +9,46 @@ import javax.persistence.*;
 public class BookingDetail {
     @Id
     @GeneratedValue
-    private long ID;
+    private Integer ID;
     @ManyToOne
+    @JsonIgnore
     @JoinColumn(name="booking_id")
     private Booking booking;
     @ManyToOne
+    @JsonIgnore
     @JoinColumn(name = "service_id")
     private Service service;
-    @ManyToOne()
-    @JoinColumn(name="user_id")
+    @ManyToOne
+    @JsonIgnore
+    @JoinColumn(name = "user_id")
     private User user;
+    @Column
+    private Integer status;
 
     public BookingDetail() {
     }
 
-    public BookingDetail(long ID, Booking booking, Service service, com.example.salonmanage.Entities.User user) {
+    public BookingDetail(Integer ID, Booking booking, Service service, User user, Integer status) {
         this.ID = ID;
         this.booking = booking;
         this.service = service;
         this.user = user;
+        this.status = status;
     }
 
-    public long getID() {
+    public Integer getStatus() {
+        return status;
+    }
+
+    public void setStatus(Integer status) {
+        this.status = status;
+    }
+
+    public Integer getID() {
         return ID;
     }
 
-    public void setID(long ID) {
+    public void setID(Integer ID) {
         this.ID = ID;
     }
 
@@ -52,11 +68,11 @@ public class BookingDetail {
         this.service = service;
     }
 
-    public com.example.salonmanage.Entities.User getUser() {
+    public User getUser() {
         return user;
     }
 
-    public void setUser(com.example.salonmanage.Entities.User user) {
+    public void setUser(User user) {
         this.user = user;
     }
 
@@ -67,6 +83,7 @@ public class BookingDetail {
                 ", booking=" + booking +
                 ", service=" + service +
                 ", user=" + user +
+                ", status=" + status +
                 '}';
     }
 }

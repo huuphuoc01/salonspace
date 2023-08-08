@@ -69,6 +69,14 @@ public class ServiceApi {
         return serviceRepo.findAllWithNotRemove();
     }
 
+    @GetMapping("/search")
+    public List<Service> list(@RequestParam(required = false) String search) {
+        if (search != null && !search.isEmpty()) {
+            return serviceRepo.findAllWithNotRemoveByName(search);
+        } else {
+            return serviceRepo.findAllWithNotRemove();
+        }
+    }
 
     @GetMapping("/detail/{id}")
     public ResponseEntity<?> listId(@PathVariable Integer id) {
@@ -118,11 +126,10 @@ public class ServiceApi {
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
-
-
     }
 
     @DeleteMapping("{id}")
+    @RolesAllowed("ROLE_ADMIN")
     public ResponseEntity<?> delete(@PathVariable Integer id) {
         if (serviceRepo.existsById(id) == false) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();

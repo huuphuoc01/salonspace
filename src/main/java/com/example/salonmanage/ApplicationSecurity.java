@@ -49,7 +49,9 @@ public class ApplicationSecurity extends WebSecurityConfigurerAdapter {
 		http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 
 		http.authorizeRequests()
-				.antMatchers("/auth/login","/auth/update","/auth/updateImg", "/docs/**", "/users/**", "/branch", "/branch/**","/service","/service/**","/img/**").permitAll()
+				.antMatchers("/auth","/auth/**", "/docs/**", "/users/**", "/branch", "/branch/**","/service",
+						"/service/**","/img/**","/booking","/booking/**","/bookings/**", "/bookings", "/topic",
+						"/topic/**","/ws/**","/ws","/app","/app/**").permitAll()
 
 				.anyRequest().authenticated();
 
@@ -81,6 +83,4 @@ public class ApplicationSecurity extends WebSecurityConfigurerAdapter {
 			registry.addMapping("/**");
 		}
 	}
-
-
 }
