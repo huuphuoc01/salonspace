@@ -10,7 +10,8 @@ import java.util.Optional;
 public interface BookingRepository extends JpaRepository<Booking,Integer> {
     Booking findBookingByID(Integer id);
 
-    List<Booking> findByUserId(Integer userId);
+    List<Booking> findByUserPhone(String phone);
+
     List<Booking> findBookingByDateAndNhanvien(String date,int nhanvien);
 
     @Query("SELECT b FROM Booking b WHERE b.status = 0 or b.payment = 0 order by b.date desc")
