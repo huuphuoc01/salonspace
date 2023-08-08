@@ -1,8 +1,6 @@
 package com.example.salonmanage.service;
 
-import com.example.salonmanage.DTO.BookingDTO;
-import com.example.salonmanage.DTO.BranchDTO;
-import com.example.salonmanage.DTO.userDTO;
+import com.example.salonmanage.DTO.*;
 import com.example.salonmanage.Entities.Booking;
 import com.example.salonmanage.reponsitory.BookingRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,27 +19,32 @@ public class BookingService {
         this.bookingRepository = bookingRepository;
     }
 
-    public List<BookingDTO> getUserBookingHistory(Integer userId) {
-        List<Booking> bookings = bookingRepository.findByUserId(userId);
+    public List<BookingHistoryDTO> getUserBookingHistoryByPhone(String phone) {
+        List<Booking> bookings = bookingRepository.findByUserPhone(phone);
         return bookings.stream().map(this::convertToDTO).collect(Collectors.toList());
     }
 
-    private BookingDTO convertToDTO(Booking booking) {
-        BookingDTO bookingDTO = new BookingDTO();
-        bookingDTO.setId(booking.getID());
-        bookingDTO.setDate(booking.getDate());
-        bookingDTO.setDiscount(booking.getDiscount());
-        bookingDTO.setStatus(booking.getStatus());
-        bookingDTO.setPayment(booking.getPayment());
-        bookingDTO.setTotalPrice(booking.getTotalPrice());
-        bookingDTO.setNhanvien(booking.getNhanvien());
+    public List<BookingHistoryDTO> getAllBookings() {
+        List<Booking> bookings = bookingRepository.findAll();
+        return bookings.stream().map(this::convertToDTO).collect(Collectors.toList());
+    }
+
+    private BookingHistoryDTO convertToDTO(Booking booking) {
+        BookingHistoryDTO bookingHistoryDTO = new BookingHistoryDTO();
+        bookingHistoryDTO.setId(booking.getID());
+        bookingHistoryDTO.setDate(booking.getDate());
+        bookingHistoryDTO.setDiscount(booking.getDiscount());
+        bookingHistoryDTO.setStatus(booking.getStatus());
+        bookingHistoryDTO.setPayment(booking.getPayment());
+        bookingHistoryDTO.setTotalPrice(booking.getTotalPrice());
+        bookingHistoryDTO.setNhanvienName(booking.getUser().getName());
 
         // Convert User entity to UserDTO
         userDTO userDTO = new userDTO();
         userDTO.setId(booking.getUser().getId());
         userDTO.setPhone(booking.getUser().getPhone());
 
-        bookingDTO.setUser(userDTO);
+        bookingHistoryDTO.setUser(userDTO);
 
         // Convert Branch entity to BranchDTO
         BranchDTO branchDTO = new BranchDTO();
@@ -49,7 +52,12 @@ public class BookingService {
         branchDTO.setName(booking.getBranch().getName());
         branchDTO.setAddress(booking.getBranch().getAddress());
 
-        bookingDTO.setBranch(branchDTO);
-        return bookingDTO;
+        bookingHistoryDTO.setBranch(branchDTO);
+
+        SetTime setTime = new SetTime();
+        setTime.setTimes(booking.getTimes().getTime());
+        bookingHistoryDTO.setTime(setTime);
+
+        return bookingHistoryDTO;
     }
 }

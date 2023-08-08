@@ -59,7 +59,7 @@ public class User implements UserDetails {
     public User(){
 
     }
-    public User(Integer id, String name, String birthday, String phone, String img, String password, String email, int status, Branch branch, List<comment> comments, Set<Role> roles, List<Booking> bookings, List<BookingDetail> bookingDetails) {
+    public User(Integer id, String name, String birthday, String phone, String img, String password, String email, int status, Branch branch, List<Comment> comments, Set<Role> roles, List<Booking> bookings, List<BookingDetail> bookingDetails) {
         this.id = id;
         this.name = name;
         this.birthday = birthday;
