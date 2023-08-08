@@ -13,8 +13,7 @@ public class Booking {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer ID;
-    @Column(nullable = false)
-    private Date date;
+    private String date;
     @Column()
     private long discount;
     @Column(nullable = false)
@@ -31,6 +30,11 @@ public class Booking {
     private User user;
     @ManyToOne()
     @JsonIgnore
+    @JoinColumn(name = "times_id")
+    private Times times ;
+
+    @ManyToOne()
+    @JsonIgnore
     @JoinColumn(name="branch_id")
     private Branch branch;
 
@@ -41,7 +45,7 @@ public class Booking {
     public Booking() {
     }
 
-    public Booking(Integer ID, Date date, long discount, int status, int payment, long totalPrice, Integer nhanvien, User user, Branch branch, Collection<BookingDetail> bookingDetails) {
+    public Booking(Integer ID, String date, long discount, int status, int payment, long totalPrice, Integer nhanvien, User user, Times times, Branch branch, Collection<BookingDetail> bookingDetails) {
         this.ID = ID;
         this.date = date;
         this.discount = discount;
@@ -50,6 +54,7 @@ public class Booking {
         this.totalPrice = totalPrice;
         this.nhanvien = nhanvien;
         this.user = user;
+        this.times = times;
         this.branch = branch;
         this.bookingDetails = bookingDetails;
     }
@@ -62,11 +67,11 @@ public class Booking {
         this.ID = ID;
     }
 
-    public Date getDate() {
+    public String getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(String date) {
         this.date = date;
     }
 
@@ -118,6 +123,14 @@ public class Booking {
         this.totalPrice = totalPrice;
     }
 
+    public Times getTimes() {
+        return times;
+    }
+
+    public void setTimes(Times times) {
+        this.times = times;
+    }
+
     public Branch getBranch() {
         return branch;
     }
@@ -133,6 +146,4 @@ public class Booking {
     public void setBookingDetails(Collection<BookingDetail> bookingDetails) {
         this.bookingDetails = bookingDetails;
     }
-
-
 }

@@ -8,6 +8,6 @@ import java.util.List;
 
 public interface BookingDetailRepository extends JpaRepository<BookingDetail,Long> {
     public BookingDetail save(BookingDetail bookingDetail);
-    @Query(value = "select * from booking_detail where cus_id = ? and status = 0;", nativeQuery = true)
+    @Query(value = "select * from booking_detail where user_id = ? and status = 0;", nativeQuery = true)
     List<BookingDetail> findByBookingId(Integer id);
 }

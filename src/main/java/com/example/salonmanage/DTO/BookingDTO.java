@@ -7,8 +7,7 @@ import java.util.Date;
 
 public class BookingDTO {
     private Integer id;
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "UTC")
-    private Date date;
+  private String date;
     private long discount;
     private int status;
     private int payment;
@@ -25,11 +24,11 @@ public class BookingDTO {
         this.id = id;
     }
 
-    public Date getDate() {
+    public String getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(String date) {
         this.date = date;
     }
 
