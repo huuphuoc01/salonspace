@@ -18,19 +18,21 @@ public class BookingDetail {
     @JsonIgnore
     @JoinColumn(name = "service_id")
     private Service service;
-    @Column
-    private Integer cus_id;
+    @ManyToOne
+    @JsonIgnore
+    @JoinColumn(name = "user_id")
+    private User user;
     @Column
     private Integer status;
 
     public BookingDetail() {
     }
 
-    public BookingDetail(Integer ID, Booking booking, Service service, Integer cus_id, Integer status) {
+    public BookingDetail(Integer ID, Booking booking, Service service, User user, Integer status) {
         this.ID = ID;
         this.booking = booking;
         this.service = service;
-        this.cus_id = cus_id;
+        this.user = user;
         this.status = status;
     }
 
@@ -66,12 +68,12 @@ public class BookingDetail {
         this.service = service;
     }
 
-    public Integer getCus_id() {
-        return cus_id;
+    public User getUser() {
+        return user;
     }
 
-    public void setCus_id(Integer cus_id) {
-        this.cus_id = cus_id;
+    public void setUser(User user) {
+        this.user = user;
     }
 
     @Override
@@ -80,7 +82,7 @@ public class BookingDetail {
                 "ID=" + ID +
                 ", booking=" + booking +
                 ", service=" + service +
-                ", cus_id=" + cus_id +
+                ", user=" + user +
                 ", status=" + status +
                 '}';
     }

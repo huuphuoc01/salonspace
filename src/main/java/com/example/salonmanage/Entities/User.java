@@ -54,11 +54,12 @@ public class User implements UserDetails {
 
     @OneToMany(mappedBy = "user")
     private  List<Booking> bookings = new ArrayList<>();
+    @OneToMany(mappedBy = "user")
+    private  List<BookingDetail> bookingDetails = new ArrayList<>();
     public User(){
 
     }
-
-    public User(Integer id, String name, String birthday, String phone, String img, String password, String email, int status, Branch branch, List<Comment> comments, Set<Role> roles, List<Booking> bookings) {
+    public User(Integer id, String name, String birthday, String phone, String img, String password, String email, int status, Branch branch, List<comment> comments, Set<Role> roles, List<Booking> bookings, List<BookingDetail> bookingDetails) {
         this.id = id;
         this.name = name;
         this.birthday = birthday;
@@ -71,8 +72,8 @@ public class User implements UserDetails {
         this.comments = comments;
         this.roles = roles;
         this.bookings = bookings;
+        this.bookingDetails = bookingDetails;
     }
-
 
     public Integer getId() {
         return id;
@@ -144,6 +145,14 @@ public class User implements UserDetails {
 
     public void setStatus(int status) {
         this.status = status;
+    }
+
+    public List<BookingDetail> getBookingDetails() {
+        return bookingDetails;
+    }
+
+    public void setBookingDetails(List<BookingDetail> bookingDetails) {
+        this.bookingDetails = bookingDetails;
     }
 
     public Branch getBranch() {
