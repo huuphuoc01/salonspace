@@ -2,6 +2,7 @@ package com.example.salonmanage.Entities;
 
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.Nationalized;
@@ -37,7 +38,8 @@ public class Service {
     private Collection<ImgDetail> imgDetails;
 
     @OneToMany(mappedBy = "service", fetch = FetchType.LAZY)
-    private Collection<comment> comments ;
+    @JsonIgnore
+    private Collection<Comment> comments ;
 
     public Service() {
     }
@@ -107,11 +109,11 @@ public class Service {
         this.imgDetails = imgDetails;
     }
 
-    public Collection<comment> getComments() {
+    public Collection<Comment> getComments() {
         return comments;
     }
 
-    public void setComments(Collection<comment> comments) {
+    public void setComments(Collection<Comment> comments) {
         this.comments = comments;
     }
 

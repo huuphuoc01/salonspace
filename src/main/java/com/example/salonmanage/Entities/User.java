@@ -5,6 +5,7 @@ package com.example.salonmanage.Entities;
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import org.hibernate.annotations.Nationalized;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -40,7 +41,8 @@ public class User implements UserDetails {
     private Branch branch;
 
     @OneToMany(mappedBy = "user")
-    private List<comment> comments =new ArrayList();
+    @JsonBackReference
+    private List<Comment> comments =new ArrayList();
     @ManyToMany
     @JoinTable(
             name = "users_roles",
@@ -56,7 +58,7 @@ public class User implements UserDetails {
 
     }
 
-    public User(Integer id, String name, String birthday, String phone, String img, String password, String email, int status, Branch branch, List<comment> comments, Set<Role> roles, List<Booking> bookings) {
+    public User(Integer id, String name, String birthday, String phone, String img, String password, String email, int status, Branch branch, List<Comment> comments, Set<Role> roles, List<Booking> bookings) {
         this.id = id;
         this.name = name;
         this.birthday = birthday;
@@ -160,11 +162,11 @@ public class User implements UserDetails {
         this.branch = branch;
     }
 
-    public List<comment> getComments() {
+    public List<Comment> getComments() {
         return comments;
     }
 
-    public void setComments(List<comment> comments) {
+    public void setComments(List<Comment> comments) {
         this.comments = comments;
     }
 

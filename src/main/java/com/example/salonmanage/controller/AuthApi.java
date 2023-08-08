@@ -56,7 +56,7 @@ public class AuthApi {
             );
             User user = (User) authentication.getPrincipal();
             String accessToken = jwtUtil.generateAccessToken(user);
-            AuthReponse response = new AuthReponse(user.getPhone(), user.getName(), user.getImg(), accessToken, user.getBirthday(), user.getEmail());
+            AuthReponse response = new AuthReponse(user.getPhone(), user.getName(), user.getImg(),user.getId(), accessToken, user.getBirthday(), user.getEmail());
             return ResponseEntity.ok().body(response);
 
         } catch (BadCredentialsException ex) {
@@ -94,7 +94,7 @@ public class AuthApi {
         user.setBirthday(request.getBirthday());
         user.setName(request.getName());
         User newUser = userService.update(user);
-        AuthReponse response = new AuthReponse(newUser.getPhone(), newUser.getName(), newUser.getImg(), request.getAccessToken(), newUser.getBirthday(), newUser.getEmail());
+        AuthReponse response = new AuthReponse(newUser.getPhone(), newUser.getName(), newUser.getImg(), newUser.getId(), request.getAccessToken(), newUser.getBirthday(), newUser.getEmail());
         return ResponseEntity.ok().body(response);
     }
 
@@ -178,7 +178,7 @@ public class AuthApi {
                 .toUriString();
         user.setImg(fileDownloadUri);
         User newUser = userService.update(user);
-        AuthReponse response = new AuthReponse(newUser.getPhone(), newUser.getName(), newUser.getImg(), request.getAccessToken(), newUser.getBirthday(), newUser.getEmail());
+        AuthReponse response = new AuthReponse(newUser.getPhone(), newUser.getName(), newUser.getImg(),newUser.getId(), request.getAccessToken(), newUser.getBirthday(), newUser.getEmail());
         return ResponseEntity.ok().body(response);
     }
 }
