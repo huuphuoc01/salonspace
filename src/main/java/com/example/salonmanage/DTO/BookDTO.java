@@ -16,6 +16,7 @@ public class BookDTO {
     private String user;
     private Integer time;
     private Integer branch;
+    private String bankCode;
 
     @Override
     public String toString() {

@@ -140,8 +140,17 @@ public class BookingApi {
             booking.setStatus(0);
             booking.setPayment(0);
             System.out.println(booking);
-            bookingRepository.save(booking);
+            Booking booking1= bookingRepository.save(booking);
+            List<BookingDetail> list= bookingDetailRepository.findByBookingId(user.getId());
+            for (BookingDetail b:list
+            ) {
+                b.setBooking(booking1);
+                b.setStatus(1);
+                System.out.println(b);
+                bookingDetailRepository.save(b);
+            }
             return ResponseEntity.ok("ss");
         }
+
     }
 
