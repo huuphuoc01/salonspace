@@ -2,6 +2,7 @@ package com.example.salonmanage.reponsitory;
 
 import com.example.salonmanage.Entities.User;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
@@ -13,5 +14,6 @@ public interface userRepository extends JpaRepository<User,Integer> {
     boolean existsByEmail(String email);
     boolean existsByPhone(String phone);
     User findByEmail(String email);
-
+    @Query(value="SELECT COUNT(*) FROM users u inner join users_roles r on u.id = r.user_id  inner join roles ro on ro.id = r.role_id where ro.name =? and u.status != 3", nativeQuery = true)
+    int countAllWithNotRemove(String role);
 }

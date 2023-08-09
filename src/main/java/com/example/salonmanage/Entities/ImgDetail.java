@@ -50,13 +50,6 @@ public class ImgDetail {
         this.service = service;
     }
 
-    @Override
-    public String toString() {
-        return "ImgDetail{" +
-                "id=" + id +
-                ", img='" + img + '\'' +
-                ", service=" + service +
-                '}';
-    }
+
 }
 

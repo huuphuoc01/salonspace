@@ -17,4 +17,7 @@ public interface ServiceRepository  extends JpaRepository<Service, Integer> {
     List<Service> findAllWithNotRemoveByName(@Param("serviceName") String serviceName);
 
     Service findServiceById(Integer id);
+
+    @Query("SELECT COUNT(*) FROM Service b WHERE b.status != 3")
+    int countAllWithNotRemove();
 }
