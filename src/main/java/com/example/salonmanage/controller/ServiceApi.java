@@ -96,7 +96,6 @@ public class ServiceApi {
             System.out.println(newService.getImg());
             System.out.println(service.getImg());
             if (!newService.getImg().equals(service.getImg())) {
-                System.out.println("sao m xáo đc hay z");
                 serviceService.removeImg(newService.getImg());
                 String pathfile = serviceService.saveImg(service.getImg());
                 String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath()

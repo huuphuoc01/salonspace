@@ -93,7 +93,6 @@ public class userServiceImpl implements UserService {
         user.setBirthday(registerDTO.getBirthday());
         user.setStatus(1);
         user.setPhone(registerDTO.getPhone());
-        user.setImg("sss");
         userRepository.save(user);
     }
 
