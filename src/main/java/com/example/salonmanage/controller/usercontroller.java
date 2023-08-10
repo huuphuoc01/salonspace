@@ -3,6 +3,7 @@ package com.example.salonmanage.controller;
 import com.example.salonmanage.DTO.forgotDTO;
 import com.example.salonmanage.DTO.registerDTO;
 import com.example.salonmanage.DTO.userDTO;
+import com.example.salonmanage.Entities.Role;
 import com.example.salonmanage.Entities.User;
 import com.example.salonmanage.reponsitory.userRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +17,9 @@ import java.net.URI;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 
@@ -137,5 +140,27 @@ public class usercontroller {
         user.setPassword(passwordEncoder.encode(forgotDTO.getOtp()));
         userRepository.save(user);
         return ResponseEntity.ok("suscess");
+    }
+
+    @GetMapping("/staff")
+    public List<Map<String, String>> getUsersWithRoleStaff() {
+        List<User> staffUsers = userRepository.findByRolesName("ROLE_STAFF");
+
+        List<Map<String, String>> result = new ArrayList<>();
+        for (User user : staffUsers) {
+            Map<String, String> userMap = new HashMap<>();
+            userMap.put("name", user.getName());
+            userMap.put("role", "ROLE_STAFF");
+            userMap.put("img", user.getImg());
+            result.add(userMap);
+        }
+
+        return result;
+    }
+
+    @GetMapping("/top-users")
+    public List<Object[]> getTopUsersWithMostBookings() {
+        List<Object[]> topUsersInfo = userRepository.findTop4UsersWithMostBookings();
+        return topUsersInfo;
     }
 }
