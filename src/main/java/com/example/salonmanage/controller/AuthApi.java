@@ -151,8 +151,10 @@ public class AuthApi {
     public ResponseEntity<?> updateImg(@RequestBody @Valid AuthReponse request) {
 
         User user = userService.findByPhone(request.getPhone());
-        String[] pathSegments = user.getImg().split("/");
-        fileStorageService.removeFile(pathSegments[pathSegments.length - 1]);
+        if(user.getImg()!=null) {
+            String[] pathSegments = user.getImg().split("/");
+            fileStorageService.removeFile(pathSegments[pathSegments.length - 1]);
+        }
         LocalDateTime currentDateTime = LocalDateTime.now();
         String dateTimeString = currentDateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd_HH-mm-ss"));
         String[] strings = request.getImg().split(",");
