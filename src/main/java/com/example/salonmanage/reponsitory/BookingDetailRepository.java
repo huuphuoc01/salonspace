@@ -10,6 +10,10 @@ public interface BookingDetailRepository extends JpaRepository<BookingDetail,Lon
     public BookingDetail save(BookingDetail bookingDetail);
     @Query(value = "select * from booking_detail where user_id = ? and status = 0;", nativeQuery = true)
     List<BookingDetail> findByBookingId(Integer id);
+    @Query(value = "select * from booking_detail where user_id =? and status = 0 and service_id=?",nativeQuery = true)
+    List<BookingDetail> existService(Integer id,Integer sid);
+    @Query(value = "select top(1) * from booking_detail where user_id =? and status = 0 and service_id=?",nativeQuery = true)
+    BookingDetail exist(Integer id,Integer sid);
     @Query(value = "select * from booking_detail where booking_id = ?", nativeQuery = true)
     List<BookingDetail> findByBookingId1(Integer id);
 }
