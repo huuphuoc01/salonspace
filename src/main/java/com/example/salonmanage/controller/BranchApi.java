@@ -38,10 +38,16 @@ public class BranchApi {
         return branchRepo.findAllWithNotRemove();
     }
 
+    @GetMapping("/admin")
+    @RolesAllowed("ROLE_ADMIN")
+    public List<Branch> listAdmin() {
+        return branchRepo.findAllWithNotRemoveAdmin();
+    }
+
     @GetMapping("/detail/{id}")
     public ResponseEntity<?>  listId(@PathVariable Integer id) {
 //        return branchRepo.findById(id).orElse(null);
-        if ( !branchRepo.existsById(id)){
+        if (!branchRepo.existsById(id) || branchRepo.findById(id).get().getStatus() ==3){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }else {
             return ResponseEntity.ok().body(branchRepo.findById(id).get());

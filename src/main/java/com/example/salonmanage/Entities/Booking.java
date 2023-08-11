@@ -22,7 +22,7 @@ public class Booking {
     private int payment;
     @Column(nullable = false)
     private long totalPrice;
-    @Column(nullable = false)
+    @Column(nullable = true)
     private Integer nhanvien;
     @ManyToOne()
     @JsonIgnore

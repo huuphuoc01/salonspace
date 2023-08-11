@@ -21,14 +21,17 @@ public class CalendarServiceImpl implements CalendarService {
     @Override
     public List<CalendarDTO> getData(String start, String end, int branch) throws Exception {
         List<Booking> bookings = new ArrayList<>();
-        if (branch==0){
+        if (branch == 0) {
             bookings = bookingRepository.getDataCalendarWithNone(start, end);
-        }else{
-             bookings = bookingRepository.getDataCalendarWithBranch(start, end,branch);
+        } else {
+            bookings = bookingRepository.getDataCalendarWithBranch(start, end, branch);
         }
-        List<CalendarDTO> calendarDTOList= new ArrayList<>();
-        for (int i = 0; i < bookings.size(); i++) {
-            calendarDTOList.add(convertToDTO(bookings.get(i)));
+        List<CalendarDTO> calendarDTOList = new ArrayList<>();
+        for (Booking b : bookings
+        ) {
+            if (b.getTimes() != null) {
+                calendarDTOList.add(convertToDTO(b));
+            }
         }
         return calendarDTOList;
     }

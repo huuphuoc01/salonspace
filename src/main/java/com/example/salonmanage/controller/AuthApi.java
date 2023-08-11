@@ -5,6 +5,7 @@ import com.example.salonmanage.DTO.AuthRequest;
 import com.example.salonmanage.DTO.UpdateUserDTO;
 import com.example.salonmanage.Entities.User;
 import com.example.salonmanage.JWT.JwtTokenUtil;
+import com.example.salonmanage.reponsitory.BookingDetailRepository;
 import com.example.salonmanage.reponsitory.BranchRepository;
 import com.example.salonmanage.reponsitory.RoleRepository;
 import com.example.salonmanage.reponsitory.userRepository;
@@ -47,6 +48,7 @@ public class AuthApi {
     @Autowired
     private RoleRepository roleRepository;
     @Autowired private BranchRepository branchRepository;
+    @Autowired private BookingDetailRepository bookingDetailRepository;
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody @Valid AuthRequest request) {
         try {
@@ -151,8 +153,10 @@ public class AuthApi {
     public ResponseEntity<?> updateImg(@RequestBody @Valid AuthReponse request) {
 
         User user = userService.findByPhone(request.getPhone());
-        String[] pathSegments = user.getImg().split("/");
-        fileStorageService.removeFile(pathSegments[pathSegments.length - 1]);
+        if (user.getImg()!=null){
+            String[] pathSegments = user.getImg().split("/");
+            fileStorageService.removeFile(pathSegments[pathSegments.length - 1]);
+        }
         LocalDateTime currentDateTime = LocalDateTime.now();
         String dateTimeString = currentDateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd_HH-mm-ss"));
         String[] strings = request.getImg().split(",");
@@ -180,5 +184,10 @@ public class AuthApi {
         User newUser = userService.update(user);
         AuthReponse response = new AuthReponse(newUser.getPhone(), newUser.getName(), newUser.getImg(),newUser.getId(), request.getAccessToken(), newUser.getBirthday(), newUser.getEmail());
         return ResponseEntity.ok().body(response);
+    }
+
+    @GetMapping("/cart/{id}")
+    public int getCart(@PathVariable Integer id){
+        return bookingDetailRepository.findByBookingId(id).size();
     }
 }

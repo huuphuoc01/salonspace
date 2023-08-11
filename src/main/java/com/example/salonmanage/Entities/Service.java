@@ -25,7 +25,7 @@ public class Service {
     private String name;
 
 
-    private float price;
+    private long price;
 
     private  String img;
     @Nationalized
@@ -44,7 +44,7 @@ public class Service {
     public Service() {
     }
 
-    public Service(Integer id, String name, float price, String img, String description, int status) {
+    public Service(Integer id, String name, long price, String img, String description, int status) {
         this.id = id;
         this.name = name;
         this.price = price;
@@ -69,11 +69,11 @@ public class Service {
         this.name = name;
     }
 
-    public float getPrice() {
+    public long getPrice() {
         return price;
     }
 
-    public void setPrice(float price) {
+    public void setPrice(long price) {
         this.price = price;
     }
 

@@ -1,5 +1,6 @@
 package com.example.salonmanage.reponsitory;
 
+import com.example.salonmanage.DTO.ChartDTO;
 import com.example.salonmanage.Entities.Booking;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -14,7 +15,7 @@ public interface BookingRepository extends JpaRepository<Booking,Integer> {
 
     List<Booking> findBookingByDateAndNhanvien(String date,int nhanvien);
 
-    @Query(value = "SELECT b FROM Booking b WHERE b.status = 0 or b.payment = 0 order by CONVERT(datetime, b.date, 103) desc", nativeQuery = true)
+    @Query(value = "SELECT * FROM Booking b WHERE b.status = 0 or b.payment = 0 order by b.id desc", nativeQuery = true)
     List<Booking> findAllWithNotRemove();
 
     @Query(value ="SELECT * FROM Booking b WHERE CONVERT(datetime, b.date, 103) >= ? and CONVERT(datetime, b.date, 103) <= ? ", nativeQuery = true)
@@ -34,4 +35,20 @@ public interface BookingRepository extends JpaRepository<Booking,Integer> {
 
     @Query(value ="SELECT top(10) *  FROM Booking b  where b.status != 0 and b.payment != 0 order by CONVERT(datetime, b.date, 103) desc", nativeQuery = true)
     List<Booking> getTop10();
+
+    @Query( value ="select b.date as date, SUM(b.total_price) as total from  booking b WHERE MONTH(CONVERT(datetime, b.date, 103)) = MONTH(GETDATE()) and b.status != 0 and b.payment != 0 GROUP BY b.date order by CONVERT(datetime, b.date, 103) ASC", nativeQuery = true)
+    List<ChartDTO> getDataChart();
+
+    @Query(value ="select b.date as date, SUM(b.total_price) as total from  booking b where CONVERT(datetime, b.date, 103) between ? and ? and b.status != 0 and b.payment != 0 GROUP BY b.date order by CONVERT(datetime, b.date, 103) ASC", nativeQuery = true)
+    List<ChartDTO> getDataChartWithDate(String dateStart, String dateEnd);
+
+    @Query( value = "select c.date, SUM(c.total) as total  from " +
+            "(select  YEAR(CONVERT(datetime, b.date, 103)) as date, SUM(b.total_price) as total from  booking b where CONVERT(datetime, b.date, 103) between ? and ? and b.status != 0 and b.payment != 0 GROUP BY CONVERT(datetime, b.date, 103)) c " +
+            "group by c.date", nativeQuery = true)
+    List<ChartDTO> getDataChartWithDateYear(String dateStart, String dateEnd);
+
+    @Query( value = "select c.date, SUM(c.total) as total  from " +
+            "(select  CONCAT(MONTH(CONVERT(datetime, b.date, 103)),'/',YEAR(CONVERT(datetime, b.date, 103))) as date, SUM(b.total_price) as total from  booking b where CONVERT(datetime, b.date, 103) between ? and ? GROUP BY CONVERT(datetime, b.date, 103)) c " +
+            "group by c.date", nativeQuery = true)
+    List<ChartDTO> getDataChartWithDateMonth(String dateStart, String dateEnd);
 }

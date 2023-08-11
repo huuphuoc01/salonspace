@@ -68,6 +68,11 @@ public class ServiceApi {
     public List<Service> list() {
         return serviceRepo.findAllWithNotRemove();
     }
+    @GetMapping("/admin")
+    @RolesAllowed("ROLE_ADMIN")
+    public List<Service> listAdmin() {
+        return serviceRepo.findAllWithNotRemoveAdmin();
+    }
 
     @GetMapping("/search")
     public List<Service> list(@RequestParam(required = false) String search) {
@@ -81,7 +86,7 @@ public class ServiceApi {
     @GetMapping("/detail/{id}")
     public ResponseEntity<?> listId(@PathVariable Integer id) {
 //        return branchRepo.findById(id).orElse(null);
-        if (!serviceRepo.existsById(id)) {
+        if (!serviceRepo.existsById(id) || serviceRepo.findById(id).get().getStatus() ==3) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         } else {
             return ResponseEntity.ok().body(serviceRepo.findById(id).get());
@@ -93,10 +98,7 @@ public class ServiceApi {
     public ResponseEntity<?> update(@PathVariable Integer id, @RequestBody ServiceDTO service) {
         if (serviceRepo.existsById(id) == true ) {
             Service newService = serviceRepo.findById(id).get();
-            System.out.println(newService.getImg());
-            System.out.println(service.getImg());
             if (!newService.getImg().equals(service.getImg())) {
-                System.out.println("sao m xáo đc hay z");
                 serviceService.removeImg(newService.getImg());
                 String pathfile = serviceService.saveImg(service.getImg());
                 String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath()
