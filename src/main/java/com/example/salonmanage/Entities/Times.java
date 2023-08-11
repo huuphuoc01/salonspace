@@ -1,5 +1,7 @@
 package com.example.salonmanage.Entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -12,6 +14,7 @@ public class Times {
     private Integer ID;
     private String time;
     @OneToMany(mappedBy = "times")
+    @JsonIgnore
     private List<Booking> booking = new ArrayList<>();
 
     public Times() {

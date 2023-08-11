@@ -3,7 +3,7 @@ package com.example.salonmanage.DTO;
 public class ServiceDTO {
     private int id;
     private String name;
-    private float price;
+    private long price;
 
     private String description;
     private String img;
@@ -13,7 +13,7 @@ public class ServiceDTO {
     public ServiceDTO() {
     }
 
-    public ServiceDTO(int id, String name, float price, String description, String img, int status, String[] imgList) {
+    public ServiceDTO(int id, String name, long price, String description, String img, int status, String[] imgList) {
         this.id = id;
         this.name = name;
         this.price = price;
@@ -55,11 +55,11 @@ public class ServiceDTO {
         this.name = name;
     }
 
-    public float getPrice() {
+    public long getPrice() {
         return price;
     }
 
-    public void setPrice(float price) {
+    public void setPrice(long price) {
         this.price = price;
     }
 

@@ -3,6 +3,7 @@ package com.example.salonmanage.service;
 import com.example.salonmanage.DTO.*;
 import com.example.salonmanage.Entities.Booking;
 import com.example.salonmanage.reponsitory.BookingRepository;
+import com.example.salonmanage.reponsitory.userRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,6 +20,9 @@ public class BookingService {
         this.bookingRepository = bookingRepository;
     }
 
+    @Autowired
+    private userRepository userRepository;
+
     public List<BookingHistoryDTO> getUserBookingHistoryByPhone(String phone) {
         List<Booking> bookings = bookingRepository.findByUserPhone(phone);
         return bookings.stream().map(this::convertToDTO).collect(Collectors.toList());
@@ -29,6 +33,11 @@ public class BookingService {
         return bookings.stream().map(this::convertToDTO).collect(Collectors.toList());
     }
 
+    public List<BookingHistoryDTO> getAllBookings2() {
+        List<Booking> bookings = bookingRepository.findAllWithNotRemove();
+        return bookings.stream().map(this::convertToDTO2).collect(Collectors.toList());
+    }
+
     private BookingHistoryDTO convertToDTO(Booking booking) {
         BookingHistoryDTO bookingHistoryDTO = new BookingHistoryDTO();
         bookingHistoryDTO.setId(booking.getID());
@@ -37,15 +46,18 @@ public class BookingService {
         bookingHistoryDTO.setStatus(booking.getStatus());
         bookingHistoryDTO.setPayment(booking.getPayment());
         bookingHistoryDTO.setTotalPrice(booking.getTotalPrice());
-        bookingHistoryDTO.setNhanvienName(booking.getUser().getName());
-
+        if (booking.getNhanvien() != null) {
+            bookingHistoryDTO.setNhanvienName(userRepository.findById(booking.getNhanvien()).get().getName());
+        }
         // Convert User entity to UserDTO
-        userDTO userDTO = new userDTO();
-        userDTO.setId(booking.getUser().getId());
-        userDTO.setPhone(booking.getUser().getPhone());
 
-        bookingHistoryDTO.setUser(userDTO);
+        if (booking.getUser() != null) {
+            userDTO userDTO = new userDTO();
+            userDTO.setId(booking.getUser().getId());
+            userDTO.setPhone(booking.getUser().getPhone());
 
+            bookingHistoryDTO.setUser(userDTO);
+        }
         // Convert Branch entity to BranchDTO
         BranchDTO branchDTO = new BranchDTO();
         branchDTO.setId(booking.getBranch().getId());
@@ -55,9 +67,46 @@ public class BookingService {
         bookingHistoryDTO.setBranch(branchDTO);
 
         SetTime setTime = new SetTime();
-        setTime.setTimes(booking.getTimes().getTime());
-        bookingHistoryDTO.setTime(setTime);
+        if (booking.getTimes() != null) {
+            setTime.setTimes(booking.getTimes().getTime());
+            bookingHistoryDTO.setTime(setTime);
+        }
+        return bookingHistoryDTO;
+    }
 
+    private BookingHistoryDTO convertToDTO2(Booking booking) {
+        BookingHistoryDTO bookingHistoryDTO = new BookingHistoryDTO();
+        bookingHistoryDTO.setId(booking.getID());
+        bookingHistoryDTO.setDate(booking.getDate());
+        bookingHistoryDTO.setDiscount(booking.getDiscount());
+        bookingHistoryDTO.setStatus(booking.getStatus());
+        bookingHistoryDTO.setPayment(booking.getPayment());
+        bookingHistoryDTO.setTotalPrice(booking.getTotalPrice());
+        if (booking.getNhanvien() != null) {
+            bookingHistoryDTO.setNhanvienName(userRepository.findById(booking.getNhanvien()).get().getName());
+        }
+        // Convert User entity to UserDTO
+
+        if (booking.getUser() != null) {
+            userDTO userDTO = new userDTO();
+            userDTO.setId(booking.getUser().getId());
+            userDTO.setPhone(booking.getUser().getName());
+
+            bookingHistoryDTO.setUser(userDTO);
+        }
+        // Convert Branch entity to BranchDTO
+        BranchDTO branchDTO = new BranchDTO();
+        branchDTO.setId(booking.getBranch().getId());
+        branchDTO.setName(booking.getBranch().getName());
+        branchDTO.setAddress(booking.getBranch().getAddress());
+
+        bookingHistoryDTO.setBranch(branchDTO);
+
+        SetTime setTime = new SetTime();
+        if (booking.getTimes() != null) {
+            setTime.setTimes(booking.getTimes().getTime());
+            bookingHistoryDTO.setTime(setTime);
+        }
         return bookingHistoryDTO;
     }
 }

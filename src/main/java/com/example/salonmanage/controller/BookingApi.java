@@ -1,11 +1,13 @@
 package com.example.salonmanage.controller;
 
 import com.example.salonmanage.DTO.BookDTO;
+import com.example.salonmanage.DTO.BookingHistoryDTO;
 import com.example.salonmanage.DTO.CartDTO;
 import com.example.salonmanage.DTO.TimeDTO;
 import com.example.salonmanage.Entities.*;
 import com.example.salonmanage.reponsitory.*;
 import com.example.salonmanage.service.BookingDetailService;
+import com.example.salonmanage.service.BookingService;
 import com.example.salonmanage.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -34,20 +36,16 @@ public class BookingApi {
     private BookingDetailRepository bookingDetailRepository;
     @Autowired
     private BranchRepository branchRepository;
-
+    @Autowired private BookingService bookingService;
 
     @PostMapping("/addToCart")
     public ResponseEntity<?> addToCart(@RequestBody CartDTO cartDTO) {
         User user = userService.findByPhone(cartDTO.getPhone());
-        System.out.println("--------------------------");
-        System.out.println(user.getRoles());
-        System.out.println("-------------------------------");
         BookingDetail bookingDetail = new BookingDetail();
 //        bookingDetail.setBooking();
         List<BookingDetail> listd = bookingDetailRepository.existService(user.getId(), cartDTO.getServiceID());
         Service service = serviceRepository.findServiceById(cartDTO.getServiceID());
         Booking booking = bookingRepository.findBookingByID(2);
-        System.out.println(booking.getDiscount());
         bookingDetail.setBooking(booking);
         bookingDetail.setService(service);
         bookingDetail.setUser(user);
@@ -94,24 +92,25 @@ public class BookingApi {
     }
 
     @GetMapping
-    public List<Booking> get() {
-        return bookingRepository.findAllWithNotRemove();
+    public List<BookingHistoryDTO> get() {
+        return bookingService.getAllBookings2();
     }
     @GetMapping("/listStaff")
     public ResponseEntity<?> listStaff(){
          List<User> list= userService.getAll();
          List<User> list1 = new ArrayList<>();
         Role role = roleRepository.findByName("ROLE_CUSTOMER");
-        System.out.println(role);
-        System.out.println("----------------------------------");
         for (User u:list
              ) {
-//            System.out.println(u.getRoles());
-            Role role1 = roleRepository.findByName(u.getRoles().toString());
-            System.out.println(u.getRoles().toString());
-            if(u.getRoles().toString().equals("[ROLE_STAFF]")){
-                list1.add(u);
-                System.out.println(u);
+//            Role role1 = roleRepository.findByName(u.getRoles().toString());
+////            if(u.getRoles().toString().equals("[ROLE_STAFF]")){
+////                list1.add(u);
+////            }
+            for (Role r: u.getRoles()
+                 ) {
+                if(r.getName().equals("ROLE_STAFF")){
+                    list1.add(u);
+                }
             }
         }
         return ResponseEntity.ok().body(list1);
@@ -124,7 +123,6 @@ public class BookingApi {
             System.out.println(b.getTimes());
         }
         List<Times> times = timesRepository.findAll();
-        System.out.println(times);
         for (Booking bo : list
         ) {
             for (Times t : times
