@@ -16,15 +16,12 @@ public class Branch {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(nullable = false, length = 128)
-    @NotNull
-    @Length(min = 5, max = 128)
-    @Nationalized
-    private String name;
-
     private double lat;
 
     private double lng;
+
+    @NotNull
+    private String phone;
 
     @Column(nullable = false, length = 1028)
     @NotNull
@@ -42,7 +39,6 @@ public class Branch {
 
     public Branch(Integer id, String name, double lat, double lng, String address, int status) {
         this.id = id;
-        this.name = name;
         this.lat = lat;
         this.lng = lng;
         this.address = address;
@@ -55,14 +51,6 @@ public class Branch {
 
     public void setId(Integer id) {
         this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     public double getLat() {
@@ -97,13 +85,20 @@ public class Branch {
         this.status = status;
     }
 
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
     @Override
     public String toString() {
         return "Branch{" +
                 "id=" + id +
-                ", name='" + name + '\'' +
                 ", lat=" + lat +
                 ", lng=" + lng +
+                ", phone=" + phone +
                 ", address='" + address + '\'' +
                 '}';
     }

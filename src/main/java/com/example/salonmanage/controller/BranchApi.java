@@ -63,9 +63,9 @@ public class BranchApi {
             Branch update = branchRepo.findById(id).orElse(null);;
 
             update.setAddress(branch.getAddress());
-            update.setName(branch.getName());
             update.setLat(branch.getLat());
             update.setLng(branch.getLng());
+            update.setPhone(branch.getPhone());
             update.setStatus(branch.getStatus());
             branchRepo.save(update);
             return ResponseEntity.ok(update);

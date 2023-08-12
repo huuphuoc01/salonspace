@@ -23,4 +23,7 @@ public interface ServiceRepository  extends JpaRepository<Service, Integer> {
 
     @Query("SELECT COUNT(*) FROM Service b WHERE b.status != 3")
     int countAllWithNotRemove();
+
+    @Query(value = "SELECT s.name, s.price FROM Service s INNER JOIN booking_detail bd ON s.id = bd.service_id GROUP BY s.id ORDER BY COUNT(bd) DESC", nativeQuery = true)
+    List<Object[]> findMostBookedServices();
 }
