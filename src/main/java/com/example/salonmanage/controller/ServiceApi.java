@@ -25,7 +25,6 @@ public class ServiceApi {
     @Autowired
     private ServiceRepository serviceRepo;
 
-
     @Autowired
     private ServiceService serviceService;
 
@@ -141,5 +140,10 @@ public class ServiceApi {
             serviceRepo.save(update);
             return ResponseEntity.ok(id);
         }
+    }
+
+    @GetMapping("/most-booked")
+    public  List<Object[]> getMostBookedServices() {
+        return serviceRepo.findMostBookedServices();
     }
 }

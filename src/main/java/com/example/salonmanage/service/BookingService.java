@@ -61,8 +61,8 @@ public class BookingService {
         // Convert Branch entity to BranchDTO
         BranchDTO branchDTO = new BranchDTO();
         branchDTO.setId(booking.getBranch().getId());
-        branchDTO.setName(booking.getBranch().getName());
         branchDTO.setAddress(booking.getBranch().getAddress());
+
 
         bookingHistoryDTO.setBranch(branchDTO);
 
@@ -97,7 +97,6 @@ public class BookingService {
         // Convert Branch entity to BranchDTO
         BranchDTO branchDTO = new BranchDTO();
         branchDTO.setId(booking.getBranch().getId());
-        branchDTO.setName(booking.getBranch().getName());
         branchDTO.setAddress(booking.getBranch().getAddress());
 
         bookingHistoryDTO.setBranch(branchDTO);
