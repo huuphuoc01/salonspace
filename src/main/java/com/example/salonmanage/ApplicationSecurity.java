@@ -52,7 +52,7 @@ public class ApplicationSecurity extends WebSecurityConfigurerAdapter {
 				.antMatchers("/auth","/auth/**", "/docs/**", "/users/**", "/branch", "/branch/**","/service",
 						"/service/**","/img/**","/booking","/booking/**","/bookings/**", "/bookings", "/topic",
 						"/topic/**","/ws/**","/ws","/app","/app/**","/comment","/comment/**","/calendar","/dashboard","/dashboard/**",
-						"/checkout/create-payment","/checkout/payment-information","/receptionist","/receptionist/**").permitAll()
+						"/checkout/create-payment","/checkout/payment-information","/receptionist","/receptionist/**","/notification","/notification/**").permitAll()
 
 				.anyRequest().authenticated();
 

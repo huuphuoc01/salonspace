@@ -91,10 +91,6 @@ public class BookingApi {
 
     }
 
-    @GetMapping
-    public List<BookingHistoryDTO> get() {
-        return bookingService.getAllBookings2();
-    }
     @GetMapping("/listStaff")
     public ResponseEntity<?> listStaff(){
          List<User> list= userService.getAll();

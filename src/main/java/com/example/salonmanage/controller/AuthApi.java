@@ -5,10 +5,7 @@ import com.example.salonmanage.DTO.AuthRequest;
 import com.example.salonmanage.DTO.UpdateUserDTO;
 import com.example.salonmanage.Entities.User;
 import com.example.salonmanage.JWT.JwtTokenUtil;
-import com.example.salonmanage.reponsitory.BookingDetailRepository;
-import com.example.salonmanage.reponsitory.BranchRepository;
-import com.example.salonmanage.reponsitory.RoleRepository;
-import com.example.salonmanage.reponsitory.userRepository;
+import com.example.salonmanage.reponsitory.*;
 import com.example.salonmanage.service.FileStorageService;
 import com.example.salonmanage.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,8 +44,13 @@ public class AuthApi {
     private userRepository userRepository;
     @Autowired
     private RoleRepository roleRepository;
-    @Autowired private BranchRepository branchRepository;
-    @Autowired private BookingDetailRepository bookingDetailRepository;
+    @Autowired
+    private BranchRepository branchRepository;
+    @Autowired
+    private BookingDetailRepository bookingDetailRepository;
+    @Autowired
+    private NotificationRepository notificationRepository;
+
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody @Valid AuthRequest request) {
         try {
@@ -58,7 +60,7 @@ public class AuthApi {
             );
             User user = (User) authentication.getPrincipal();
             String accessToken = jwtUtil.generateAccessToken(user);
-            AuthReponse response = new AuthReponse(user.getPhone(), user.getName(), user.getImg(),user.getId(), accessToken, user.getBirthday(), user.getEmail());
+            AuthReponse response = new AuthReponse(user.getPhone(), user.getName(), user.getImg(), user.getId(), accessToken, user.getBirthday(), user.getEmail());
             return ResponseEntity.ok().body(response);
 
         } catch (BadCredentialsException ex) {
@@ -137,7 +139,7 @@ public class AuthApi {
             user.getRoles().clear();
             user.setBranch(null);
             for (int i = 0; i < request.getRole().size(); i++) {
-                if(request.getRole().get(i).getName().equals("ROLE_RECEPTIONIST") && (request.getBranch()!=0)){
+                if (request.getRole().get(i).getName().equals("ROLE_RECEPTIONIST") && (request.getBranch() != 0)) {
                     user.setBranch(branchRepository.findById(request.getBranch()).get());
                 }
                 user.addRole(roleRepository.findById(request.getRole().get(i).getId()).get());
@@ -153,7 +155,7 @@ public class AuthApi {
     public ResponseEntity<?> updateImg(@RequestBody @Valid AuthReponse request) {
 
         User user = userService.findByPhone(request.getPhone());
-        if (user.getImg()!=null){
+        if (user.getImg() != null) {
             String[] pathSegments = user.getImg().split("/");
             fileStorageService.removeFile(pathSegments[pathSegments.length - 1]);
         }
@@ -182,12 +184,17 @@ public class AuthApi {
                 .toUriString();
         user.setImg(fileDownloadUri);
         User newUser = userService.update(user);
-        AuthReponse response = new AuthReponse(newUser.getPhone(), newUser.getName(), newUser.getImg(),newUser.getId(), request.getAccessToken(), newUser.getBirthday(), newUser.getEmail());
+        AuthReponse response = new AuthReponse(newUser.getPhone(), newUser.getName(), newUser.getImg(), newUser.getId(), request.getAccessToken(), newUser.getBirthday(), newUser.getEmail());
         return ResponseEntity.ok().body(response);
     }
 
     @GetMapping("/cart/{id}")
-    public int getCart(@PathVariable Integer id){
+    public int getCart(@PathVariable Integer id) {
         return bookingDetailRepository.findByBookingId(id).size();
+    }
+
+    @GetMapping("/notification/{id}")
+    public int getNotification(@PathVariable Integer id) {
+        return notificationRepository.count(id);
     }
 }

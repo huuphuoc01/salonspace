@@ -33,8 +33,8 @@ public class BookingService {
         return bookings.stream().map(this::convertToDTO).collect(Collectors.toList());
     }
 
-    public List<BookingHistoryDTO> getAllBookings2() {
-        List<Booking> bookings = bookingRepository.findAllWithNotRemove();
+    public List<BookingHistoryDTO> getAllBookings2(int branch) {
+        List<Booking> bookings = bookingRepository.findAllWithNotRemoveWithBranch(branch);
         return bookings.stream().map(this::convertToDTO2).collect(Collectors.toList());
     }
 
