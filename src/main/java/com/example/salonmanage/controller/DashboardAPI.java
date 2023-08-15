@@ -43,7 +43,12 @@ public class DashboardAPI {
         dashboardDTO.setEmployee(userRepository.countAllWithNotRemove("ROLE_STAFF"));
         dashboardDTO.setTotalPrice(bookingRepository.sumAmount());
         dashboardDTO.setBooking(bookingRepository.countAllWithNotRemove());
-        dashboardDTO.setIncrease((bookingRepository.countAllWithNotRemove() - bookingRepository.countAllWithNotRemove30DayBefore()) / bookingRepository.countAllWithNotRemove() * 100);
+        int count30DayBefore = bookingRepository.countAllWithNotRemove30DayBefore();
+        if (count30DayBefore==0){
+            dashboardDTO.setIncrease((bookingRepository.countAllWithNotRemove())  * 100);
+        }else{
+            dashboardDTO.setIncrease((bookingRepository.countAllWithNotRemove() - bookingRepository.countAllWithNotRemove30DayBefore()) / bookingRepository.countAllWithNotRemove30DayBefore() * 100);
+        }
         List<Booking> booking = bookingRepository.getTop10();
         List<BookingDashboard> bookingDashboards = new ArrayList<>();
         String name;

@@ -1,12 +1,15 @@
 package com.example.salonmanage.controller;
 
+import com.example.salonmanage.DTO.BookingHistoryDTO;
 import com.example.salonmanage.DTO.ReceptionistDTO;
 import com.example.salonmanage.Entities.*;
 import com.example.salonmanage.reponsitory.*;
+import com.example.salonmanage.service.BookingService;
+import com.example.salonmanage.service.NotificationService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -26,10 +29,20 @@ public class ReceptionistAPI {
     private BookingRepository bookingRepository;
     @Autowired
     private BookingDetailRepository bookingDetailRepository;
-    @Autowired private TimesRepository timesRepository;
+    @Autowired
+    private TimesRepository timesRepository;
+    @Autowired
+    private BookingService bookingService;
+    @Autowired
+    private NotificationService notificationService;
+    private final SimpMessagingTemplate messagingTemplate;
+
+    public ReceptionistAPI(SimpMessagingTemplate messagingTemplate) {
+        this.messagingTemplate = messagingTemplate;
+    }
 
     @GetMapping
-    public List<Times> getTime(){
+    public List<Times> getTime() {
         return timesRepository.findAll();
     }
 
@@ -45,7 +58,7 @@ public class ReceptionistAPI {
             user = userReponsitory.findByPhone(receptionistDTO.getPhone()).get();
         }
         for (int i = 0; i < receptionistDTO.getServiceId().size(); i++) {
-            if (checkUser == true && serviceRepository.existsById(receptionistDTO.getServiceId().get(i)) && serviceRepository.getById(receptionistDTO.getServiceId().get(i)).getStatus()==1) {
+            if (checkUser == true && serviceRepository.existsById(receptionistDTO.getServiceId().get(i)) && serviceRepository.getById(receptionistDTO.getServiceId().get(i)).getStatus() == 1) {
                 BookingDetail bookingDetail = new BookingDetail();
                 bookingDetail.setStatus(1);
                 bookingDetail.setUser(user);
@@ -76,28 +89,42 @@ public class ReceptionistAPI {
     }
 
     @GetMapping("/status/{id}")
-    public ResponseEntity<?> setStatus(@PathVariable Integer id){
+    public ResponseEntity<?> setStatus(@PathVariable Integer id) {
         if (bookingRepository.existsById(id)) {
             Booking booking = bookingRepository.findById(id).get();
             booking.setStatus(1);
             bookingRepository.save(booking);
+            if (booking.getUser() != null) {
+                Notification notification = notificationService.save("Đơn hàng " + booking.getID().toString() + " đã được hoàn thành", booking.getUser());
+                messagingTemplate.convertAndSend("/topic/booking/" + booking.getUser().getId().toString(), notification);
+            }
             return ResponseEntity.ok(id);
-        }else{
+        } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
 
     }
 
     @GetMapping("/payment/{id}")
-    public ResponseEntity<?> setPayment(@PathVariable Integer id){
+    public ResponseEntity<?> setPayment(@PathVariable Integer id) {
         if (bookingRepository.existsById(id)) {
             Booking booking = bookingRepository.findById(id).get();
             booking.setPayment(1);
             bookingRepository.save(booking);
+            if (booking.getUser() != null) {
+                Notification notification = notificationService.save("Đơn hàng " + booking.getID().toString() + " đã được thanh toán", booking.getUser());
+                messagingTemplate.convertAndSend("/topic/booking/" + booking.getUser().getId().toString(), notification);
+            }
             return ResponseEntity.ok(id);
-        }else{
+        } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
 
+    }
+
+    @GetMapping("/booking/{phone}")
+    public List<BookingHistoryDTO> getBookingForReceptionist(@PathVariable String phone) {
+        User receptionist = userReponsitory.findByPhone(phone).get();
+        return bookingService.getAllBookings2(receptionist.getBranch().getId());
     }
 }

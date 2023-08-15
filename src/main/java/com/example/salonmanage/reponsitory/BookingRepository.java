@@ -18,6 +18,9 @@ public interface BookingRepository extends JpaRepository<Booking,Integer> {
     @Query(value = "SELECT * FROM Booking b WHERE b.status = 0 or b.payment = 0 order by b.id desc", nativeQuery = true)
     List<Booking> findAllWithNotRemove();
 
+    @Query(value = "SELECT * FROM Booking b WHERE b.status = 0 or b.payment = 0 and branch_id = ? order by b.id desc", nativeQuery = true)
+    List<Booking> findAllWithNotRemoveWithBranch(int branch);
+
     @Query(value ="SELECT * FROM Booking b WHERE CONVERT(datetime, b.date, 103) >= ? and CONVERT(datetime, b.date, 103) <= ? ", nativeQuery = true)
     List<Booking> getDataCalendarWithNone(String start, String end);
 
@@ -30,7 +33,7 @@ public interface BookingRepository extends JpaRepository<Booking,Integer> {
     @Query("SELECT SUM(b.totalPrice) FROM Booking b where b.status != 0 and b.payment != 0")
     Long sumAmount();
 
-    @Query(value ="SELECT count(*) FROM Booking b WHERE b.status != 0 and b.payment != 0 and CONVERT(datetime, b.date, 103) >= DATEADD(DAY, -30, GETDATE())", nativeQuery = true)
+    @Query(value ="SELECT count(*) FROM Booking b WHERE b.status != 0 and b.payment != 0 and CONVERT(datetime, b.date, 103) <= DATEADD(DAY, -30, GETDATE())", nativeQuery = true)
     int countAllWithNotRemove30DayBefore();
 
     @Query(value ="SELECT top(10) *  FROM Booking b  where b.status != 0 and b.payment != 0 order by CONVERT(datetime, b.date, 103) desc", nativeQuery = true)
