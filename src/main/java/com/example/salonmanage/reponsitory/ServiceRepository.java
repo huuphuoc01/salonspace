@@ -29,7 +29,7 @@ public interface ServiceRepository  extends JpaRepository<Service, Integer> {
             "INNER JOIN booking_detail bd ON s.id = bd.service_id " +
             "GROUP BY s.id " +
             "ORDER BY booking_count DESC " +
-            "LIMIT 9",
+            "Limmit 9",
             nativeQuery = true)
     List<Object[]> findMostBookedServices();
 

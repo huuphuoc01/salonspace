@@ -37,6 +37,8 @@ public class BookingApi {
     @Autowired
     private BranchRepository branchRepository;
     @Autowired private BookingService bookingService;
+    @Autowired
+    private EventRepository eventRepository;
 
     @PostMapping("/addToCart")
     public ResponseEntity<?> addToCart(@RequestBody CartDTO cartDTO) {
@@ -161,6 +163,19 @@ public class BookingApi {
             }
             return ResponseEntity.ok("ss");
         }
+
+        @PostMapping("/event")
+        public ResponseEntity<?> event(){
+        event e = eventRepository.showevent();
+        return ResponseEntity.ok().body(e);
+        }
+    @PostMapping("/discount")
+    public ResponseEntity<?> event1(@RequestParam String date){
+        event e =eventRepository.getByDate(date);
+        System.out.println(e.getDiscount()
+        );
+        return ResponseEntity.ok().body(e.getDiscount());
+    }
 
     }
 
