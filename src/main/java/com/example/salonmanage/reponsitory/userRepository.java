@@ -1,5 +1,6 @@
 package com.example.salonmanage.reponsitory;
 
+import com.example.salonmanage.Entities.Branch;
 import com.example.salonmanage.Entities.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -15,6 +16,8 @@ public interface userRepository extends JpaRepository<User,Integer> {
     boolean existsByEmail(String email);
     boolean existsByPhone(String phone);
     User findByEmail(String email);
+    @Query(value = "select * from users where branch_id=?", nativeQuery = true)
+    List<User> findByBranch(Integer branch);
     @Query(value="SELECT COUNT(*) FROM users u inner join users_roles r on u.id = r.user_id  inner join roles ro on ro.id = r.role_id where ro.name =? and u.status != 3", nativeQuery = true)
     int countAllWithNotRemove(String role);
     List<User> findByRolesName(String roleName);
