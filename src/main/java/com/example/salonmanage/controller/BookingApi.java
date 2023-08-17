@@ -39,6 +39,8 @@ public class BookingApi {
     @Autowired private BookingService bookingService;
     @Autowired
     private EventRepository eventRepository;
+    @Autowired
+    private userRepository userRepository;
 
     @PostMapping("/addToCart")
     public ResponseEntity<?> addToCart(@RequestBody CartDTO cartDTO) {
@@ -94,9 +96,11 @@ public class BookingApi {
     }
 
     @GetMapping("/listStaff")
-    public ResponseEntity<?> listStaff(){
-         List<User> list= userService.getAll();
+    public ResponseEntity<?> listStaff(@RequestParam Integer branch){
+
+         List<User> list= userRepository.findByBranch(branch);
          List<User> list1 = new ArrayList<>();
+        System.out.println(list);
         Role role = roleRepository.findByName("ROLE_CUSTOMER");
         for (User u:list
              ) {
