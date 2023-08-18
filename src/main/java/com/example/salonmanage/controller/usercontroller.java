@@ -1,5 +1,6 @@
 package com.example.salonmanage.controller;
 
+import com.example.salonmanage.DTO.ResetPassDTO;
 import com.example.salonmanage.DTO.forgotDTO;
 import com.example.salonmanage.DTO.registerDTO;
 import com.example.salonmanage.DTO.userDTO;
@@ -150,5 +151,19 @@ public class usercontroller {
     public List<Object[]> getTopUsersWithMostBookings() {
         List<Object[]> topUsersInfo = userRepository.findTop4UsersWithMostBookings();
         return topUsersInfo;
+    }
+
+    @PostMapping("/newpass")
+    public  ResponseEntity<String> resetPass(@RequestBody ResetPassDTO resetPassDTO)
+    {
+        User user = userRepository.getById(resetPassDTO.getId());
+        boolean isMatch = passwordEncoder.matches(resetPassDTO.getOldPass(),user.getPassword());
+        if(isMatch==true){
+         user.setPassword(passwordEncoder.encode(resetPassDTO.getNewPass()));
+         userRepository.save(user);
+         return ResponseEntity.ok("suscess");
+        }
+        else return ResponseEntity.ok("wrong");
+
     }
 }

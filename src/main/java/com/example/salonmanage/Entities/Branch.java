@@ -20,7 +20,7 @@ public class Branch {
 
     private double lng;
 
-    @NotNull
+
     private String phone;
 
     @Column(nullable = false, length = 1028)

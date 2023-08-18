@@ -37,6 +37,10 @@ public class BookingApi {
     @Autowired
     private BranchRepository branchRepository;
     @Autowired private BookingService bookingService;
+    @Autowired
+    private EventRepository eventRepository;
+    @Autowired
+    private userRepository userRepository;
 
     @PostMapping("/addToCart")
     public ResponseEntity<?> addToCart(@RequestBody CartDTO cartDTO) {
@@ -92,9 +96,11 @@ public class BookingApi {
     }
 
     @GetMapping("/listStaff")
-    public ResponseEntity<?> listStaff(){
-         List<User> list= userService.getAll();
+    public ResponseEntity<?> listStaff(@RequestParam Integer branch){
+
+         List<User> list= userRepository.findByBranch(branch);
          List<User> list1 = new ArrayList<>();
+        System.out.println(list);
         Role role = roleRepository.findByName("ROLE_CUSTOMER");
         for (User u:list
              ) {
@@ -161,6 +167,19 @@ public class BookingApi {
             }
             return ResponseEntity.ok("ss");
         }
+
+        @PostMapping("/event")
+        public ResponseEntity<?> event(){
+        event e = eventRepository.showevent();
+        return ResponseEntity.ok().body(e);
+        }
+    @PostMapping("/discount")
+    public ResponseEntity<?> event1(@RequestParam String date){
+        event e =eventRepository.getByDate(date);
+        System.out.println(e.getDiscount()
+        );
+        return ResponseEntity.ok().body(e.getDiscount());
+    }
 
     }
 

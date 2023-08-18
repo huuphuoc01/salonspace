@@ -11,24 +11,32 @@ public class event {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    private Date startDay;
-    private Date endDay;
-    private float discount;
+
+    private Integer discount;
     private String content;
-    private String title;
+   private String img;
+   private String date;
+    private int status;
 
 
     public event() {
     }
 
-    public event(int id, Date startDay, Date endDay, float discount, String content, String title) {
+    public event(int id, Integer discount, String content, String img, String date, int status) {
         this.id = id;
-        this.startDay = startDay;
-        this.endDay = endDay;
         this.discount = discount;
         this.content = content;
-        this.title = title;
+        this.img = img;
+        this.date = date;
+        this.status = status;
+    }
 
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
     }
 
     public int getId() {
@@ -39,27 +47,11 @@ public class event {
         this.id = id;
     }
 
-    public Date getStartDay() {
-        return startDay;
-    }
-
-    public void setStartDay(Date startDay) {
-        this.startDay = startDay;
-    }
-
-    public Date getEndDay() {
-        return endDay;
-    }
-
-    public void setEndDay(Date endDay) {
-        this.endDay = endDay;
-    }
-
     public float getDiscount() {
         return discount;
     }
 
-    public void setDiscount(float discount) {
+    public void setDiscount(Integer discount) {
         this.discount = discount;
     }
 
@@ -71,24 +63,19 @@ public class event {
         this.content = content;
     }
 
-    public String getTitle() {
-        return title;
+    public String getImg() {
+        return img;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
+    public void setImg(String img) {
+        this.img = img;
     }
 
+    public int getStatus() {
+        return status;
+    }
 
-    @Override
-    public String toString() {
-        return "event{" +
-                "id=" + id +
-                ", startDay=" + startDay +
-                ", endDay=" + endDay +
-                ", discount=" + discount +
-                ", content='" + content + '\'' +
-                ", title='" + title + '\'' +
-                '}';
+    public void setStatus(int status) {
+        this.status = status;
     }
 }
