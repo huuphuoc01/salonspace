@@ -26,6 +26,10 @@ public class Times {
         this.booking = booking;
     }
 
+    public Times(String time) {
+        this.time = time;
+    }
+
     public Integer getID() {
         return ID;
     }

@@ -19,9 +19,9 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-@RestController
-@RequestMapping("/dashboard")
-@CrossOrigin(origins = "*")
+    @RestController
+    @RequestMapping("/dashboard")
+    @CrossOrigin(origins = "*")
 public class DashboardAPI {
 
     @Autowired
