@@ -9,7 +9,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface ServiceRepository  extends JpaRepository<Service, Integer> {
+public interface ServiceRepository extends JpaRepository<Service, Integer> {
     @Query("SELECT b FROM Service b WHERE b.status = 1")
     List<Service> findAllWithNotRemove();
 
@@ -24,6 +24,14 @@ public interface ServiceRepository  extends JpaRepository<Service, Integer> {
     @Query("SELECT COUNT(*) FROM Service b WHERE b.status != 3")
     int countAllWithNotRemove();
 
-    @Query(value = "SELECT s.name, s.price FROM Service s INNER JOIN booking_detail bd ON s.id = bd.service_id GROUP BY s.id ORDER BY COUNT(bd) DESC", nativeQuery = true)
+    @Query(value = "SELECT TOP(9) s.img, s.name, s.price, b.booking_count" +
+            " FROM Service s " +
+            " INNER JOIN (" +
+            "    SELECT bd.service_id, COUNT(bd.service_id) AS booking_count" +
+            "    FROM booking_detail bd" +
+            "    GROUP BY bd.service_id" +
+            " ) b ON s.id = b.service_id where s.status=1" +
+            " ORDER BY b.booking_count DESC",
+            nativeQuery = true)
     List<Object[]> findMostBookedServices();
 }

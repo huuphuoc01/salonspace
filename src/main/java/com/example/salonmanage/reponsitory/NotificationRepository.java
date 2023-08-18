@@ -16,7 +16,7 @@ public interface NotificationRepository extends JpaRepository<Notification, Inte
     @Query(value = "select * from notification n where n.user_id = ?  order by n.date desc ", nativeQuery = true)
     List<Notification> listAll(int user);
 
-    @Query(value = "select COUNT(*) from notification n where n.user_id = ?  order by n.date desc ", nativeQuery = true)
+    @Query(value = "select COUNT(*) from notification n where n.user_id = ? and n.status = 0 ", nativeQuery = true)
     int count(int user);
 
     @Transactional
