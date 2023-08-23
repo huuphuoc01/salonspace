@@ -4,7 +4,6 @@ package com.example.salonmanage.Entities;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
-
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.Nationalized;
@@ -29,7 +28,8 @@ public class User implements UserDetails {
     private String phone;
     @Column()
     private String img;
-    @Column(nullable=false,length = 255)
+    @Column(nullable = false, length = 255)
+
     private String password;
     @Column(nullable = false)
     @Email
