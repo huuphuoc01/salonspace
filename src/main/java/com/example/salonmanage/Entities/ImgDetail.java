@@ -6,7 +6,7 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "img_deatail")
+@Table(name = "img_detail")
 public class ImgDetail {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

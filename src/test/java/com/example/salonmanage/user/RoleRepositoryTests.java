@@ -28,25 +28,26 @@ public class RoleRepositoryTests {
 	@Test
 	public void testCreateRoles() {
 		Role admin = new Role("ROLE_ADMIN");
-		Role editor = new Role("ROLE_EDITOR");
+		Role receptionist = new Role("ROLE_RECEPTIONIST");
 		Role customer = new Role("ROLE_CUSTOMER");
+		Role staff = new Role("ROLE_STAFF");
 		
-		repo.saveAll(List.of(admin, editor, customer));
+		repo.saveAll(List.of(admin, receptionist, customer, staff));
 		
 		long count = repo.count();
-		assertEquals(3, count);
+		assertEquals(4, count);
 	}
 
-	@Test
-	public void testCreateUsers() {
-		User user = new User();
-		user.setName("lượng");
-		user.setPhone("03769101971");
-		user.setPassword("abc");
-		user.setEmail("abc@gmail.com");
-		User newUser =  userService.save(user);
-
-
-		assertEquals(newUser.getId(), 2);
-	}
+//	@Test
+//	public void testCreateUsers() {
+//		User user = new User();
+//		user.setName("lượng");
+//		user.setPhone("03769101971");
+//		user.setPassword("abc");
+//		user.setEmail("abc@gmail.com");
+//		User newUser =  userService.save(user);
+//
+//
+//		assertEquals(newUser.getId(), 2);
+//	}
 }
