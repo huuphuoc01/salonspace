@@ -24,7 +24,7 @@ public class DataSeeder implements CommandLineRunner {
         // Kiểm tra xem dữ liệu đã tồn tại hay chưa
         if (roleRepository.count() == 0) {
             Role admin = new Role("ROLE_ADMIN");
-            Role editor = new Role("ROLE_EDITOR");
+            Role editor = new Role("ROLE_RECEPTIONIST");
             Role customer = new Role("ROLE_CUSTOMER");
             Role staff = new Role("ROLE_STAFF");
             roleRepository.saveAll(List.of(admin, editor, customer, staff));

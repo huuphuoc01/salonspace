@@ -105,6 +105,23 @@ public class ReceptionistAPI {
 
     }
 
+    @GetMapping("/accept/{id}")
+    public ResponseEntity<?> setAccept(@PathVariable Integer id) {
+        if (bookingRepository.existsById(id)) {
+            Booking booking = bookingRepository.findById(id).get();
+            booking.setStatus(2);
+            bookingRepository.save(booking);
+            if (booking.getUser() != null) {
+                Notification notification = notificationService.save("Đơn hàng " + booking.getID().toString() + " đã chấp nhận", booking.getUser());
+                messagingTemplate.convertAndSend("/topic/booking/" + booking.getUser().getId().toString(), notification);
+            }
+            return ResponseEntity.ok(id);
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+
+    }
+
     @GetMapping("/payment/{id}")
     public ResponseEntity<?> setPayment(@PathVariable Integer id) {
         if (bookingRepository.existsById(id)) {
