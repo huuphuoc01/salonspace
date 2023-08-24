@@ -13,7 +13,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @RestController
@@ -141,46 +145,72 @@ public class BookingApi {
 
         return ResponseEntity.ok().body(times);
     }
+        @PostMapping("/book")
+        public ResponseEntity<?> book(@RequestBody BookDTO bookDTO){
+            System.out.println(bookDTO);
 
-    @PostMapping("/book")
-    public ResponseEntity<?> book(@RequestBody BookDTO bookDTO) {
-        System.out.println(bookDTO);
-        User user = userService.findByPhone(bookDTO.getUser());
-        Booking booking = new Booking();
-        booking.setDate(bookDTO.getDate());
-        booking.setNhanvien(bookDTO.getNhanvien());
-        booking.setUser(user);
-        Times times = timesRepository.getById(bookDTO.getTime());
-        booking.setTimes(times);
-        Branch branch = branchRepository.getById(bookDTO.getBranch());
-        booking.setBranch(branch);
-        booking.setTotalPrice(bookDTO.getTotalPrice());
-        booking.setDiscount(0);
-        booking.setStatus(0);
-        booking.setPayment(0);
-        System.out.println(booking);
-        Booking booking1 = bookingRepository.save(booking);
-        List<BookingDetail> list = bookingDetailRepository.findByBookingId(user.getId());
-        for (BookingDetail b : list
-        ) {
-            b.setBooking(booking1);
-            b.setStatus(1);
-            System.out.println(b);
-            bookingDetailRepository.save(b);
+            User user = userService.findByPhone(bookDTO.getUser());
+            List<Booking> listb = bookingRepository.existbooking(user.getId());
+            if(listb.size()==0) {
+                Booking booking = new Booking();
+                booking.setDate(bookDTO.getDate());
+                booking.setNhanvien(bookDTO.getNhanvien());
+                booking.setUser(user);
+                Times times = timesRepository.getById(bookDTO.getTime());
+                booking.setTimes(times);
+                Branch branch = branchRepository.getById(bookDTO.getBranch());
+                booking.setBranch(branch);
+                booking.setTotalPrice(bookDTO.getTotalPrice());
+                booking.setDiscount(0);
+                booking.setStatus(0);
+                booking.setPayment(0);
+                System.out.println(booking);
+                Booking booking1 = bookingRepository.save(booking);
+                List<BookingDetail> list = bookingDetailRepository.findByBookingId(user.getId());
+                for (BookingDetail b : list
+                ) {
+                    b.setBooking(booking1);
+                    b.setStatus(1);
+                    System.out.println(b);
+                    bookingDetailRepository.save(b);
+                }
+                return ResponseEntity.ok("ss");
+            }
+            else return ResponseEntity.ok("fail");
+
         }
-        return ResponseEntity.ok("ss");
-    }
 
-    @PostMapping("/event")
-    public ResponseEntity<?> event() {
-        event e = eventRepository.showevent();
-        return ResponseEntity.ok().body(e);
-    }
-
+        @PostMapping("/event")
+        public ResponseEntity<?> event() {
+            LocalDate date = LocalDate.now();
+            Date date1 = java.sql.Date.valueOf(date);
+            SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+            String strDate = formatter.format(date1);
+            System.out.println(strDate);
+            List<event> list = eventRepository.findAll();
+            for (event v:list
+                 ) {
+                if(v.getDate().equals(strDate)){
+                    v.setStatus(1);
+                    eventRepository.save(v);
+                }
+            }
+            event e = eventRepository.showevent();
+            if (e != null) {
+                return ResponseEntity.ok().body(e);
+            }else {
+                return ResponseEntity.ok("not");
+            }
+        }
     @PostMapping("/discount")
     public ResponseEntity<?> event1(@RequestParam String date) {
         event e = eventRepository.getByDate(date);
-        return ResponseEntity.ok().body(e.getDiscount());
+        if (e != null) {
+            return ResponseEntity.ok().body(e.getDiscount());
+        } else {
+            return ResponseEntity.ok("not");
+        }
+
     }
 
 }

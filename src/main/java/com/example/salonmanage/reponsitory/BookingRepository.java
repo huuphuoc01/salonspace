@@ -19,6 +19,8 @@ public interface BookingRepository extends JpaRepository<Booking,Integer> {
 
     @Query(value = "SELECT * FROM Booking b WHERE b.status = 0 or b.payment = 0 order by b.id desc", nativeQuery = true)
     List<Booking> findAllWithNotRemove();
+    @Query(value = "SELECT * FROM Booking b WHERE b.status = 0 and b.payment = 0 and b.user_id=?", nativeQuery = true)
+    List<Booking> existbooking(int user_id);
 
     @Query(value = "SELECT * FROM Booking b WHERE b.status = 0 or b.payment = 0 and branch_id = ? order by b.id desc", nativeQuery = true)
     List<Booking> findAllWithNotRemoveWithBranch(int branch);
