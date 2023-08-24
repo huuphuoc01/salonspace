@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.*;
 
+import javax.annotation.security.RolesAllowed;
 import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
@@ -46,6 +47,7 @@ public class ReceptionistAPI {
         return timesRepository.findAll();
     }
 
+    @RolesAllowed("ROLE_RECEPTIONIST")
     @PostMapping
     public ResponseEntity<?> create(@RequestBody @Valid ReceptionistDTO receptionistDTO) {
         List<BookingDetail> bookingDetails = new ArrayList<>();
@@ -88,6 +90,7 @@ public class ReceptionistAPI {
         return ResponseEntity.ok("done");
     }
 
+    @RolesAllowed("ROLE_RECEPTIONIST")
     @GetMapping("/status/{id}")
     public ResponseEntity<?> setStatus(@PathVariable Integer id) {
         if (bookingRepository.existsById(id)) {
@@ -105,6 +108,25 @@ public class ReceptionistAPI {
 
     }
 
+    @RolesAllowed("ROLE_RECEPTIONIST")
+    @GetMapping("/accept/{id}")
+    public ResponseEntity<?> setAccept(@PathVariable Integer id) {
+        if (bookingRepository.existsById(id)) {
+            Booking booking = bookingRepository.findById(id).get();
+            booking.setStatus(2);
+            bookingRepository.save(booking);
+            if (booking.getUser() != null) {
+                Notification notification = notificationService.save("Đơn hàng " + booking.getID().toString() + " đã chấp nhận", booking.getUser());
+                messagingTemplate.convertAndSend("/topic/booking/" + booking.getUser().getId().toString(), notification);
+            }
+            return ResponseEntity.ok(id);
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+
+    }
+
+    @RolesAllowed("ROLE_RECEPTIONIST")
     @GetMapping("/payment/{id}")
     public ResponseEntity<?> setPayment(@PathVariable Integer id) {
         if (bookingRepository.existsById(id)) {
@@ -122,6 +144,7 @@ public class ReceptionistAPI {
 
     }
 
+    @RolesAllowed("ROLE_RECEPTIONIST")
     @GetMapping("/booking/{phone}")
     public List<BookingHistoryDTO> getBookingForReceptionist(@PathVariable String phone) {
         User receptionist = userReponsitory.findByPhone(phone).get();

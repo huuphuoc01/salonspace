@@ -38,6 +38,7 @@ public class ApplicationSecurity extends WebSecurityConfigurerAdapter {
 				.orElseThrow(() -> new UsernameNotFoundException("User " + username + " not found.")));
 	}
 
+
 	@Bean
 	public PasswordEncoder passwordEncoder() {
 		return new BCryptPasswordEncoder();
@@ -49,10 +50,7 @@ public class ApplicationSecurity extends WebSecurityConfigurerAdapter {
 		http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 
 		http.authorizeRequests()
-				.antMatchers("/auth","/auth/**", "/docs/**", "/users/**", "/branch", "/branch/**","/service",
-						"/service/**","/img/**","/booking","/booking/**","/bookings/**", "/bookings", "/topic",
-						"/topic/**","/ws/**","/ws","/app","/app/**","/comment","/comment/**","/calendar","/dashboard","/dashboard/**",
-						"/checkout/create-payment","/checkout/payment-information","/receptionist","/receptionist/**","/notification","/notification/**").permitAll()
+				.antMatchers("/**").permitAll()
 
 				.anyRequest().authenticated();
 

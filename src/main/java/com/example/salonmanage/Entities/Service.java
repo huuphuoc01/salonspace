@@ -28,6 +28,8 @@ public class Service {
     private long price;
 
     private  String img;
+    @Column(nullable = true, columnDefinition = "NVARCHAR(MAX)")
+
     @Nationalized
     private String description;
 

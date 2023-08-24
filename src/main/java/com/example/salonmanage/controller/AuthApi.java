@@ -139,7 +139,7 @@ public class AuthApi {
             user.getRoles().clear();
             user.setBranch(null);
             for (int i = 0; i < request.getRole().size(); i++) {
-                if (request.getRole().get(i).getName().equals("ROLE_RECEPTIONIST") && (request.getBranch() != 0)) {
+                if (request.getRole().get(i).getName().equals("ROLE_STAFF") || request.getRole().get(i).getName().equals("ROLE_RECEPTIONIST") && (request.getBranch() != 0)) {
                     user.setBranch(branchRepository.findById(request.getBranch()).get());
                 }
                 user.addRole(roleRepository.findById(request.getRole().get(i).getId()).get());

@@ -22,7 +22,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/booking")
-@CrossOrigin(origins ="*", allowedHeaders = "*")
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 public class BookingApi {
     @Autowired
     private BookingDetailService bookingDetailService;
@@ -40,7 +40,8 @@ public class BookingApi {
     private BookingDetailRepository bookingDetailRepository;
     @Autowired
     private BranchRepository branchRepository;
-    @Autowired private BookingService bookingService;
+    @Autowired
+    private BookingService bookingService;
     @Autowired
     private EventRepository eventRepository;
     @Autowired
@@ -58,14 +59,13 @@ public class BookingApi {
         bookingDetail.setService(service);
         bookingDetail.setUser(user);
         bookingDetail.setStatus(0);
-            if(listd.size()==0) {
-                BookingDetail B = bookingDetailRepository.save(bookingDetail);
-                System.out.println("ok ");
-                return ResponseEntity.ok("ok");
-            }
-            else {
-              return  ResponseEntity.ok("notok");
-            }
+        if (listd.size() == 0) {
+            BookingDetail B = bookingDetailRepository.save(bookingDetail);
+            System.out.println("ok ");
+            return ResponseEntity.ok("ok");
+        } else {
+            return ResponseEntity.ok("notok");
+        }
 
     }
 
@@ -85,42 +85,44 @@ public class BookingApi {
         }
         return ResponseEntity.ok().body(list1);
     }
+
     @PostMapping("/deleteDetail")
     public void deleteDetail(@RequestBody CartDTO cartDTO) {
         User user = userService.findByPhone(cartDTO.getPhone());
-        BookingDetail b = bookingDetailRepository.exist(user.getId(),cartDTO.getServiceID());
+        BookingDetail b = bookingDetailRepository.exist(user.getId(), cartDTO.getServiceID());
         System.out.println(cartDTO.getServiceID());
         System.out.println(user.getId());
         System.out.println(b);
-            b.setStatus(2);
-            bookingDetailRepository.save(b);
+        b.setStatus(2);
+        bookingDetailRepository.save(b);
         System.out.println(b);
 //        System.out.println(b1);
 
     }
 
     @GetMapping("/listStaff")
-    public ResponseEntity<?> listStaff(@RequestParam Integer branch){
+    public ResponseEntity<?> listStaff(@RequestParam Integer branch) {
 
-         List<User> list= userRepository.findByBranch(branch);
-         List<User> list1 = new ArrayList<>();
+        List<User> list = userRepository.findByBranch(branch);
+        List<User> list1 = new ArrayList<>();
         System.out.println(list);
         Role role = roleRepository.findByName("ROLE_CUSTOMER");
-        for (User u:list
-             ) {
+        for (User u : list
+        ) {
 //            Role role1 = roleRepository.findByName(u.getRoles().toString());
 ////            if(u.getRoles().toString().equals("[ROLE_STAFF]")){
 ////                list1.add(u);
 ////            }
-            for (Role r: u.getRoles()
-                 ) {
-                if(r.getName().equals("ROLE_STAFF")){
+            for (Role r : u.getRoles()
+            ) {
+                if (r.getName().equals("ROLE_STAFF")) {
                     list1.add(u);
                 }
             }
         }
         return ResponseEntity.ok().body(list1);
     }
+
     @PostMapping("/listTime")
     public ResponseEntity<?> listTime(@RequestBody TimeDTO timeDTO) {
         List<Booking> list = bookingRepository.findBookingByDateAndNhanvien(timeDTO.getDate(), timeDTO.getStaffId());
@@ -205,11 +207,11 @@ public class BookingApi {
         event e = eventRepository.getByDate(date);
         if (e != null) {
             return ResponseEntity.ok().body(e.getDiscount());
-        }
-        else {
+        } else {
             return ResponseEntity.ok("not");
         }
-    }
 
     }
+
+}
 
