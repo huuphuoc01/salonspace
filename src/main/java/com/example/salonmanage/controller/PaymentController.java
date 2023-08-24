@@ -156,6 +156,7 @@ public class PaymentController {
             @RequestParam(value = "vnp_OrderInfo", required = false) String orderInfo,
             @RequestParam(value = "vnp_ResponseCode", required = false) String responseCode,
             @RequestParam(value = "vnp_TransactionNo", required = false) String transactionNo,
+            @RequestParam(value = "vnp_TransactionStatus" ,required = false) String transactionStatus,
             @RequestParam(value = "vnp_TxnRef", required = false) String txnRef,
             @RequestParam(value = "vnp_SecureHash", required = false) String secureHash,
             @RequestParam(value = "vnp_SecureHashType", required = false) String secureHashType
@@ -169,12 +170,14 @@ public class PaymentController {
 //
 //            }
         if(booking.getID().toString().equalsIgnoreCase(txnRef)) {
-            booking.setPayment(1);
+            System.out.println(transactionStatus);
+            if(transactionStatus.equals("00")) {
+                booking.setPayment(1);
+            }
             bookingRepository.save(booking);
             result.setStatus("00");
             result.setMessage("Checkout successfully");
             var uri = UriComponentsBuilder.fromHttpUrl("http://localhost:3000/")
-                    .queryParam("BookingID", txnRef)
                     .build();
             return ResponseEntity.status(HttpStatus.FOUND).location(uri.toUri()).build();
         }

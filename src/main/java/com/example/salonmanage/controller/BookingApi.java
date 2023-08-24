@@ -204,13 +204,18 @@ public class BookingApi {
         }
     @PostMapping("/discount")
     public ResponseEntity<?> event1(@RequestParam String date) {
-        event e = eventRepository.getByDate(date);
-        if (e != null) {
-            return ResponseEntity.ok().body(e.getDiscount());
-        } else {
-            return ResponseEntity.ok("not");
-        }
+        int discount = 0;
+        List<event> list = eventRepository.findByDate(date);
+        if(list.size()>0) {
+            event e = eventRepository.findByDate(date).get(1);
 
+            if (e != null) {
+                discount = e.getDiscount();
+            } else {
+                discount = 0;
+            }
+        }
+return ResponseEntity.ok().body(discount);
     }
 
 }

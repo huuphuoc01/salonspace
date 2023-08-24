@@ -12,7 +12,7 @@ import java.util.Optional;
 
 public interface BookingRepository extends JpaRepository<Booking,Integer> {
     Booking findBookingByID(Integer id);
-
+    @Query(value = "SELECT * FROM Booking b order by b.id desc", nativeQuery = true)
     List<Booking> findByUserPhone(String phone);
 
     List<Booking> findBookingByDateAndNhanvien(String date, int nhanvien);

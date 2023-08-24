@@ -37,10 +37,16 @@ public class EventAPI {
     private ServiceService serviceService;
 
     @PostMapping
-    @RolesAllowed("ROLE_ADMIN")
+//    @RolesAllowed("ROLE_ADMIN")
     public void create(@RequestBody @Valid event event) {
         LocalDateTime currentDateTime = LocalDateTime.now();
         String dateTimeString = currentDateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd_HH-mm-ss"));
+        String day = event.getDate().substring(8,10);
+        String month =event.getDate().substring(5,7);
+        String year =event.getDate().substring(0,4);
+        String date= day+"/"+month+"/"+year;
+
+        event.setDate(date);
         String[] strings = event.getImg().split(",");
         String extension;
         switch (strings[0]) {//check image's extension
@@ -80,7 +86,18 @@ public class EventAPI {
     @RolesAllowed("ROLE_ADMIN")
     public ResponseEntity<?> update(@PathVariable Integer id, @RequestBody event event) {
         if (eventRepository.existsById(id) == true) {
+            String date ;
             event newEvent = eventRepository.findById(id).get();
+            System.out.println(event.getDate());
+            if(event.getDate().equals(newEvent.getDate())==false){
+            String day = event.getDate().substring(8,10);
+            String month =event.getDate().substring(5,7);
+            String year =event.getDate().substring(0,4);
+           date= day+"/"+month+"/"+year;
+            System.out.println(date);}
+            else {
+                date=newEvent.getDate();
+            }
             if (!newEvent.getImg().equals(event.getImg())) {
                 serviceService.removeImg(event.getImg());
                 String pathfile = serviceService.saveImg(event.getImg());
@@ -93,7 +110,7 @@ public class EventAPI {
             newEvent.setContent(event.getContent());
             newEvent.setDiscount(event.getDiscount());
             newEvent.setStatus(event.getStatus());
-            newEvent.setDate(event.getDate());
+            newEvent.setDate(date);
             event savedEvent = eventRepository.save(newEvent);
             URI productURI = URI.create("/event/" + savedEvent.getId());
             return ResponseEntity.created(productURI).body(savedEvent);
