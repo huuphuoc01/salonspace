@@ -2,9 +2,6 @@ package com.example.salonmanage.Entities;
 
 import javax.persistence.*;
 
-
-import java.util.Date;
-
 @Entity
 @Table(name = "event")
 public class event {
@@ -14,8 +11,8 @@ public class event {
 
     private Integer discount;
     private String content;
-   private String img;
-   private String date;
+    private String img;
+    private String date;
     private int status;
 
 
@@ -47,7 +44,7 @@ public class event {
         this.id = id;
     }
 
-    public float getDiscount() {
+    public int getDiscount() {
         return discount;
     }
 

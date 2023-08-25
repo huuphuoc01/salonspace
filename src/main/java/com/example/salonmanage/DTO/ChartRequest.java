@@ -1,17 +1,27 @@
 package com.example.salonmanage.DTO;
 
 public class ChartRequest {
-        private String dateStart;
+    private String dateStart;
     private String dateEnd;
     private int type;
 
+    private int branch;
     public ChartRequest() {
     }
 
-    public ChartRequest(String dateStart, String dateEnd, int type) {
+    public ChartRequest(String dateStart, String dateEnd, int type, int branch) {
         this.dateStart = dateStart;
         this.dateEnd = dateEnd;
         this.type = type;
+        this.branch = branch;
+    }
+
+    public int getBranch() {
+        return branch;
+    }
+
+    public void setBranch(int branch) {
+        this.branch = branch;
     }
 
     public String getDateStart() {

@@ -76,4 +76,5 @@ public interface BookingRepository extends JpaRepository<Booking,Integer> {
     @Modifying()
     @Query(value = "update booking set status = 3 from booking b  where (b.status = 0 or b.status =2) and CONVERT(datetime, b.date, 103)< CAST(GETDATE() AS DATE)", nativeQuery = true)
     void checkStatus();
+
 }
