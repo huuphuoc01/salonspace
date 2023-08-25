@@ -11,6 +11,7 @@ import com.example.salonmanage.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -50,7 +51,11 @@ public class AuthApi {
     private BookingDetailRepository bookingDetailRepository;
     @Autowired
     private NotificationRepository notificationRepository;
+    private final SimpMessagingTemplate messagingTemplate;
 
+    public AuthApi(SimpMessagingTemplate messagingTemplate) {
+        this.messagingTemplate = messagingTemplate;
+    }
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody @Valid AuthRequest request) {
         try {
@@ -145,6 +150,7 @@ public class AuthApi {
                 user.addRole(roleRepository.findById(request.getRole().get(i).getId()).get());
             }
             userRepository.save(user);
+            messagingTemplate.convertAndSend("/topic/update/" + request.getId().toString(),"abc");
             return ResponseEntity.ok().body("done");
         } else {
             return ResponseEntity.ok().body("id");

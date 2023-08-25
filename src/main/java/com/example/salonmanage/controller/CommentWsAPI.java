@@ -70,10 +70,14 @@ public class CommentWsAPI {
                 commentService.delete(message.getId());
                 commentRepository.delete(comment);
                 return message.getId();
-            } else {
+            } else if (message.getParentID()==1) {
+                commentService.delete(message.getId());
+                commentRepository.delete(comment);
+                return message.getId();
+            } else{
                 return 0;
             }
-        }else {
+        } else {
             return 0;
         }
 

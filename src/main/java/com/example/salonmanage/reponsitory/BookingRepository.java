@@ -22,7 +22,7 @@ public interface BookingRepository extends JpaRepository<Booking,Integer> {
     @Query(value = "SELECT * FROM Booking b WHERE b.status = 0 and b.payment = 0 and b.user_id=?", nativeQuery = true)
     List<Booking> existbooking(int user_id);
 
-    @Query(value = "SELECT * FROM Booking b WHERE b.status = 0 or b.payment = 0 and branch_id = ? order by b.id desc", nativeQuery = true)
+    @Query(value = "SELECT * FROM Booking b WHERE ((b.status != 1 or b.payment = 0) and b.status != 3)  and branch_id = ? order by b.id desc", nativeQuery = true)
     List<Booking> findAllWithNotRemoveWithBranch(int branch);
 
     @Query(value = "SELECT * FROM Booking b WHERE CONVERT(datetime, b.date, 103) >= ? and CONVERT(datetime, b.date, 103) <= ? ", nativeQuery = true)
@@ -31,7 +31,7 @@ public interface BookingRepository extends JpaRepository<Booking,Integer> {
     @Query(value = "SELECT * FROM Booking b WHERE CONVERT(datetime, b.date, 103) >= ? and CONVERT(datetime, b.date, 103) <= ? and branch_id = ?", nativeQuery = true)
     List<Booking> getDataCalendarWithBranch(String start, String end, int branch);
 
-    @Query("SELECT COUNT(*) FROM Booking b WHERE b.status != 0 and b.payment != 0")
+    @Query("SELECT COUNT(*) FROM Booking b WHERE b.status = 1 and b.payment = 1")
     int countAllWithNotRemove();
 
     @Query("SELECT SUM(b.totalPrice) FROM Booking b where b.status = 1 and b.payment = 1")
@@ -76,4 +76,5 @@ public interface BookingRepository extends JpaRepository<Booking,Integer> {
     @Modifying()
     @Query(value = "update booking set status = 3 from booking b  where (b.status = 0 or b.status =2) and CONVERT(datetime, b.date, 103)< CAST(GETDATE() AS DATE)", nativeQuery = true)
     void checkStatus();
+
 }
