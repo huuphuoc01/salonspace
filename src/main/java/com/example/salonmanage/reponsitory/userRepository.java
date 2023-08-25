@@ -18,6 +18,8 @@ public interface userRepository extends JpaRepository<User,Integer> {
     User findByEmail(String email);
     @Query(value = "select * from users where branch_id=?", nativeQuery = true)
     List<User> findByBranch(Integer branch);
+
+    User getByPhone(String phone);
     @Query(value="SELECT COUNT(*) FROM users u inner join users_roles r on u.id = r.user_id  inner join roles ro on ro.id = r.role_id where ro.name =? and u.status != 3", nativeQuery = true)
     int countAllWithNotRemove(String role);
     List<User> findByRolesName(String roleName);
