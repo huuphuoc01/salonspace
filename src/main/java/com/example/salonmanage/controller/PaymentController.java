@@ -58,7 +58,6 @@ public class PaymentController {
         booking.setDiscount(0);
         booking.setStatus(0);
         booking.setPayment(0);
-        System.out.println(booking);
         Booking booking1= bookingRepository.save(booking);
         List<BookingDetail> list= bookingDetailRepository.findByBookingId(user.getId());
         for (BookingDetail b:list
@@ -112,21 +111,105 @@ public class PaymentController {
                 try {
                     hashData.append(URLEncoder.encode(fieldValue, StandardCharsets.US_ASCII.toString()));
                 } catch (UnsupportedEncodingException e) {
-                    // TODO Auto-generated catch block
+
                     e.printStackTrace();
                 }
                 // Build query
                 try {
                     query.append(URLEncoder.encode(fieldName, StandardCharsets.US_ASCII.toString()));
                 } catch (UnsupportedEncodingException e) {
-                    // TODO Auto-generated catch block
+
                     e.printStackTrace();
                 }
                 query.append('=');
                 try {
                     query.append(URLEncoder.encode(fieldValue, StandardCharsets.US_ASCII.toString()));
                 } catch (UnsupportedEncodingException e) {
-                    // TODO Auto-generated catch block
+
+                    e.printStackTrace();
+                }
+                if (itr.hasNext()) {
+                    query.append('&');
+                    hashData.append('&');
+                }
+            }
+        }
+        String queryUrl = query.toString();
+        String vnp_SecureHash = PaymentConfig.hmacSHA512(PaymentConfig.CHECKSUM, hashData.toString());
+        queryUrl += "&vnp_SecureHash=" + vnp_SecureHash;
+        String paymentUrl = PaymentConfig.VNPAYURL + "?" + queryUrl;
+        PaymentRes result = new PaymentRes();
+        result.setStatus("00");
+        result.setMessage("Success");
+        result.setUrl(paymentUrl);
+        return ResponseEntity.status(HttpStatus.OK).body(result);
+    }
+
+    @PostMapping("/checkout/re-create-payment")
+    public ResponseEntity<?> createPayment(@RequestParam int bookingid) {
+        Booking booking1 = bookingRepository.getById(bookingid);
+        User user = booking1.getUser();
+        Booking booking = new Booking();
+
+//        Order order = orderRepository.findByOrderId(requestParams.getOrderId());
+
+        Long amount = booking1.getTotalPrice() * 100;
+        Map<String, String> vnp_Params = new HashMap<>();
+        vnp_Params.put("vnp_Version", PaymentConfig.VERSIONVNPAY);
+        vnp_Params.put("vnp_Command", PaymentConfig.COMMAND);
+        vnp_Params.put("vnp_TmnCode", PaymentConfig.TMNCODE);
+        vnp_Params.put("vnp_Amount", String.valueOf(amount));
+        vnp_Params.put("vnp_CurrCode", PaymentConfig.CURRCODE);
+        // if (requestParams.getBankCode() != null &&
+        // !requestParams.getBankCode().isEmpty()) {
+        vnp_Params.put("vnp_BankCode", "NCB");
+        vnp_Params.put("vnp_Locale", PaymentConfig.LOCALEDEFAULT);
+        // vnp_Params.put("vnp_CardType", PaymentConfig.CARDTYPE);
+        vnp_Params.put("vnp_TxnRef", String.valueOf(booking1.getID()));
+        vnp_Params.put("vnp_OrderInfo", "Thanh toan hoa don" + booking1.getID());
+        vnp_Params.put("vnp_OrderType", PaymentConfig.ORDERTYPE);
+        vnp_Params.put("vnp_ReturnUrl", PaymentConfig.RETURNURL);
+        vnp_Params.put("vnp_IpAddr", PaymentConfig.IPDEFAULT);
+
+        Calendar cld = Calendar.getInstance(TimeZone.getTimeZone("Etc/GMT+7"));
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMddHHmmss");
+        String vnp_CreateDate = formatter.format(cld.getTime());
+        vnp_Params.put("vnp_CreateDate", vnp_CreateDate);
+
+        cld.add(Calendar.MINUTE, 15);
+        String vnp_ExpireDate = formatter.format(cld.getTime());
+        vnp_Params.put("vnp_ExpireDate", vnp_ExpireDate);
+
+        List fieldNames = new ArrayList(vnp_Params.keySet());
+        Collections.sort(fieldNames);
+        StringBuilder hashData = new StringBuilder();
+        StringBuilder query = new StringBuilder();
+        Iterator itr = fieldNames.iterator();
+        while (itr.hasNext()) {
+            String fieldName = (String) itr.next();
+            String fieldValue = (String) vnp_Params.get(fieldName);
+            if ((fieldValue != null) && (fieldValue.length() > 0)) {
+                // Build hash data
+                hashData.append(fieldName);
+                hashData.append('=');
+                try {
+                    hashData.append(URLEncoder.encode(fieldValue, StandardCharsets.US_ASCII.toString()));
+                } catch (UnsupportedEncodingException e) {
+
+                    e.printStackTrace();
+                }
+                // Build query
+                try {
+                    query.append(URLEncoder.encode(fieldName, StandardCharsets.US_ASCII.toString()));
+                } catch (UnsupportedEncodingException e) {
+
+                    e.printStackTrace();
+                }
+                query.append('=');
+                try {
+                    query.append(URLEncoder.encode(fieldValue, StandardCharsets.US_ASCII.toString()));
+                } catch (UnsupportedEncodingException e) {
+
                     e.printStackTrace();
                 }
                 if (itr.hasNext()) {
@@ -162,13 +245,8 @@ public class PaymentController {
             @RequestParam(value = "vnp_SecureHashType", required = false) String secureHashType
     ) throws MessagingException {
         TransactionStatusDTO result = new TransactionStatusDTO();
-//        Order order = orderRepository.findByOrderId(Long.parseLong(txnRef));
 
         Booking booking = bookingRepository.getById(Integer.parseInt(txnRef));
-
-//        if (!responseCode.equalsIgnoreCase("00")){
-//
-//            }
         if(booking.getID().toString().equalsIgnoreCase(txnRef)) {
             System.out.println(transactionStatus);
             if(transactionStatus.equals("00")) {
