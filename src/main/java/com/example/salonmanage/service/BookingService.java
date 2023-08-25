@@ -2,6 +2,7 @@ package com.example.salonmanage.service;
 
 import com.example.salonmanage.DTO.*;
 import com.example.salonmanage.Entities.Booking;
+import com.example.salonmanage.Entities.User;
 import com.example.salonmanage.reponsitory.BookingRepository;
 import com.example.salonmanage.reponsitory.userRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +25,8 @@ public class BookingService {
     private userRepository userRepository;
 
     public List<BookingHistoryDTO> getUserBookingHistoryByPhone(String phone) {
-        List<Booking> bookings = bookingRepository.findByUserPhone(phone);
+        User u = userRepository.getByPhone(phone);
+        List<Booking> bookings = bookingRepository.findByUserPhone(u.getId());
         return bookings.stream().map(this::convertToDTO).collect(Collectors.toList());
     }
 

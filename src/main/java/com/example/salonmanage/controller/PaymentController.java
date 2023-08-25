@@ -251,6 +251,7 @@ public class PaymentController {
             System.out.println(transactionStatus);
             if(transactionStatus.equals("00")) {
                 booking.setPayment(1);
+                booking.setStatus(2);
             }
             bookingRepository.save(booking);
             result.setStatus("00");
