@@ -177,7 +177,7 @@ public class PaymentController {
             bookingRepository.save(booking);
             result.setStatus("00");
             result.setMessage("Checkout successfully");
-            var uri = UriComponentsBuilder.fromHttpUrl("http://localhost:3000/")
+            var uri = UriComponentsBuilder.fromHttpUrl("http://salonspace.io.vn/")
                     .build();
             return ResponseEntity.status(HttpStatus.FOUND).location(uri.toUri()).build();
         }

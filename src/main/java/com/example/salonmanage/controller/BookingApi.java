@@ -207,9 +207,9 @@ public class BookingApi {
         int discount = 0;
         List<event> list = eventRepository.findByDate(date);
         if(list.size()>0) {
-            event e = eventRepository.findByDate(date).get(1);
+            event e = eventRepository.findByDate(date).get(0);
 
-            if (e != null) {
+            if (e.getStatus()!=1) {
                 discount = e.getDiscount();
             } else {
                 discount = 0;
