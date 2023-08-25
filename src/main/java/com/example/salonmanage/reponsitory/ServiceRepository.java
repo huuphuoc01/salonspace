@@ -25,7 +25,7 @@ public interface ServiceRepository extends JpaRepository<Service, Integer> {
     int countAllWithNotRemove();
 
 
-    @Query(value = "SELECT TOP(9) s.img, s.name, s.price, b.booking_count" +
+    @Query(value = "SELECT TOP(12) s.img, s.name, s.price, b.booking_count" +
             " FROM Service s " +
             " INNER JOIN (" +
             "    SELECT bd.service_id, COUNT(bd.service_id) AS booking_count" +
